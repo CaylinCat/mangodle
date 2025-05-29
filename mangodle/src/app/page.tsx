@@ -11,26 +11,30 @@ const ROWS = [
 ];
 
 export default function Wordle() {
-  const [guesses, setGuesses] = useState<string[]>([]); // past guesses
-  const [currentGuess, setCurrentGuess] = useState(''); // what user is typing now
-  const [isSubmitted, setIsSubmitted] = useState(false); // to track when to show colors
+  const [guesses, setGuesses] = useState<string[]>([]);
+  const [currentGuess, setCurrentGuess] = useState('');
+  const [animatingRow, setAnimatingRow] = useState<number | null>(null);
+
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (guesses.length >= 6) return; // max 6 guesses
+      if (guesses.length >= 6) return;
 
       if (e.key === 'Enter') {
         if (currentGuess.length === ANSWER.length) {
-          setGuesses((prev) => [...prev, currentGuess.toUpperCase()]);
+          const newGuess = currentGuess.toUpperCase();
+          setGuesses((prev) => [...prev, newGuess]);
           setCurrentGuess('');
-          setIsSubmitted(true);
+          setAnimatingRow(guesses.length);
+          setTimeout(() => {
+            setAnimatingRow(null);
+          }, 600 * ANSWER.length); 
         }
       } else if (e.key === 'Backspace') {
         setCurrentGuess((prev) => prev.slice(0, -1));
       } else if (/^[a-zA-Z]$/.test(e.key)) {
         if (currentGuess.length < ANSWER.length) {
           setCurrentGuess((prev) => prev + e.key.toUpperCase());
-          setIsSubmitted(false);
         }
       }
     }
@@ -42,15 +46,21 @@ export default function Wordle() {
   const renderTile = (letter: string, i: number, guessIndex: number) => {
     let className = styles.tile;
 
-    if (isSubmitted && guessIndex < guesses.length) {
-      // Show colors only after submitting the guess
+    if (guessIndex < guesses.length) {
       if (letter === ANSWER[i]) className += ` ${styles.correct}`;
       else if (ANSWER.includes(letter)) className += ` ${styles.close}`;
       else className += ` ${styles.wrong}`;
     }
 
+    const isFlipping = animatingRow === guessIndex;
+    const style = isFlipping ? { animationDelay: `${i * 0.15}s` } : undefined;
+
     return (
-      <div key={i} className={className}>
+      <div
+        key={i}
+        className={`${className} ${isFlipping ? styles.flip : ''}`}
+        style={style}
+      >
         {letter}
       </div>
     );
@@ -69,35 +79,39 @@ export default function Wordle() {
     );
   };
 
-  // Calculate empty rows to keep total rows to 6
   const emptyRows = 6 - guesses.length - 1;
 
-  // Helper to get color class for a key based on guesses (only after submit)
   const getKeyColor = (letter: string) => {
-    if (!isSubmitted) return '';
+    let hasCorrect = false;
+    let hasClose = false;
+    let hasWrong = false;
+
     for (const guess of guesses) {
       for (let i = 0; i < guess.length; i++) {
         const char = guess[i];
         if (char !== letter) continue;
-        if (char === ANSWER[i]) return styles.correct;
-        if (ANSWER.includes(char)) return styles.close;
+
+        if (char === ANSWER[i]) hasCorrect = true;
+        else if (ANSWER.includes(char)) hasClose = true;
+        else hasWrong = true;
       }
     }
+
+    if (hasCorrect) return styles.correct;
+    if (hasClose) return styles.close;
+    if (hasWrong) return styles.wrong;
+
     return '';
   };
 
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>MANGO Wordle</h1>
+      <h1 className={styles.title}>🥭 MANGODLE 🥭</h1>
 
       <div className={styles.board}>
-        {/* Past guesses */}
         {guesses.map((guess, i) => renderRow(guess, i))}
-
-        {/* Current guess (unsubmitted) */}
         {guesses.length < 6 && renderRow(currentGuess, guesses.length)}
-
-        {/* Empty rows */}
         {[...Array(emptyRows > 0 ? emptyRows : 0)].map((_, i) =>
           renderRow('', guesses.length + 1 + i)
         )}
@@ -107,19 +121,16 @@ export default function Wordle() {
         {guesses.includes(ANSWER)
           ? 'You Win! 🎉'
           : guesses.length >= 6
-          ? `Game Over! The answer was ${ANSWER}`
+          ? `Womp womp :( The answer was ${ANSWER}`
           : 'Type letters and press Enter to submit'}
       </div>
 
-      {/* Keyboard */}
+      {/*digital keyboard*/}
       <div className={styles.keyboard}>
         {ROWS.map((row, i) => (
           <div key={i} className={styles.keyboardRow}>
             {row.map((letter) => (
-              <div
-                key={letter}
-                className={`${styles.key} ${getKeyColor(letter)}`}
-              >
+              <div key={letter} className={`${styles.key} ${getKeyColor(letter)}`}>
                 {letter}
               </div>
             ))}
