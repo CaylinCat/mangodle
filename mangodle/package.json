@@ -4,9 +4,9 @@
   "homepage": "https://caylincat.github.io/mangodle/",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build && next export",
-    "predeploy": "npm run build",
+    "build": "next build",
+    "export": "next export",
+    "predeploy": "npm run build && npm run export",
     "deploy": "gh-pages -d out"
   },
   "dependencies": {
