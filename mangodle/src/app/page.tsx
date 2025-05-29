@@ -14,7 +14,7 @@ export default function Wordle() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState('');
   const [animatingRow, setAnimatingRow] = useState<number | null>(null);
-
+  const [showWinPopup, setShowWinPopup] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -28,7 +28,7 @@ export default function Wordle() {
           setAnimatingRow(guesses.length);
           setTimeout(() => {
             setAnimatingRow(null);
-          }, 600 * ANSWER.length); 
+          }, 600 * ANSWER.length);
         }
       } else if (e.key === 'Backspace') {
         setCurrentGuess((prev) => prev.slice(0, -1));
@@ -42,6 +42,12 @@ export default function Wordle() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentGuess, guesses]);
+
+  useEffect(() => {
+    if (guesses.includes(ANSWER)) {
+      setShowWinPopup(true);
+    }
+  }, [guesses]);
 
   const renderTile = (letter: string, i: number, guessIndex: number) => {
     let className = styles.tile;
@@ -104,6 +110,29 @@ export default function Wordle() {
     return '';
   };
 
+  // Function to generate the share text (like your example)
+  const generateShareText = () => {
+    let text = `Mangodle ${guesses.length}/6*\n\n`;
+
+    // Generate emoji grid per guess
+    for (const guess of guesses) {
+      for (let i = 0; i < guess.length; i++) {
+        const char = guess[i];
+        if (char === ANSWER[i]) text += '🟩';
+        else if (ANSWER.includes(char)) text += '🟨';
+        else text += '⬜';
+      }
+      text += '\n';
+    }
+    return text.trim();
+  };
+
+  const handleCopyResult = () => {
+    const text = generateShareText();
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Result copied to clipboard!');
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -137,6 +166,20 @@ export default function Wordle() {
           </div>
         ))}
       </div>
+
+      {/* Win Popup Modal */}
+      {showWinPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popup}>
+            <h2>You Win! 🎉</h2>
+            <pre style={{ whiteSpace: 'pre-wrap', fontSize: '1.2rem', margin: '1rem 0' }}>
+              {generateShareText()}
+            </pre>
+            <button onClick={handleCopyResult}>Copy Result</button>
+            <button onClick={() => setShowWinPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

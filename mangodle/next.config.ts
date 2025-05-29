@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+import { NextConfig } from 'next'
+
+const isProd = process.env.NODE_ENV === 'production'
+
+// Replace 'REPO-NAME' with your GitHub repo name
+const basePath = isProd ? '/mangodle' : ''
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  output: 'export',   // static HTML export
+  basePath,
+  assetPrefix: basePath,
+}
 
-export default nextConfig;
+export default nextConfig
