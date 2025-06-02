@@ -12,6 +12,50 @@ export default function SpellingBee() {
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [message, setMessage] = useState('');
 
+  const RANKS = [
+    { name: 'Beginner', threshold: 0 },
+    { name: 'Good Start', threshold: 5 },
+    { name: 'Moving Up', threshold: 10 },
+    { name: 'Solid', threshold: 20 },
+    { name: 'Great', threshold: 30 },
+    { name: 'Amazing', threshold: 40 },
+    { name: 'Genius', threshold: 50 },
+  ];
+
+  const calculateScore = () => {
+    let score = 0;
+    for (let word of foundWords) {
+      if (word.length === 4) {
+        score += 1;
+      } else {
+        score += word.length;
+      }
+
+      const uniqueLetters = new Set(word.toUpperCase());
+      const allLetters = [...letters, CENTER_LETTER];
+      if (allLetters.every((l) => uniqueLetters.has(l))) {
+        score += 7;
+      }
+    }
+    return score;
+  };
+
+  const getRank = (score: number) => {
+    for (let i = RANKS.length - 1; i >= 0; i--) {
+      if (score >= RANKS[i].threshold) return RANKS[i].name;
+    }
+    return 'Beginner';
+  };
+
+  const score = calculateScore();
+  const rank = getRank(score);
+  const maxThreshold = RANKS[RANKS.length - 1].threshold;
+  const progress = Math.min((score / maxThreshold) * 100, 100);
+
+  const currentRankIndex = RANKS
+    .map((r) => r.threshold)
+    .filter((threshold) => score >= threshold).length - 1;
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toUpperCase();
@@ -70,6 +114,33 @@ export default function SpellingBee() {
   return (
     <div className={styles.container}>
       <h1>Mango Bee</h1>
+
+      <div className={styles.progressBarContainer}>
+        <div className={styles.rankLabel}>
+          {RANKS[currentRankIndex]?.name || ''}
+        </div>
+
+        <div className={styles.progressTrack}>
+          {RANKS.map((r, index) => {
+            const isActive = score >= r.threshold;
+            const isCurrent = index === currentRankIndex;
+            const leftPercent = (index / (RANKS.length - 1)) * 100;
+
+            return (
+              <div
+                key={r.name}
+                className={`${styles.progressStep}`}
+                style={{ left: `${leftPercent}%`, position: 'absolute' }}
+              >
+                <div className={`${styles.dot} ${isActive ? styles.active : ''}`}>
+                  {isCurrent ? score : ''}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
 
       <div className={styles.mainArea}>
         <div className={styles.leftPanel}>

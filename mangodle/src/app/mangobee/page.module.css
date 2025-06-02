@@ -62,7 +62,7 @@
 }
 
 .actionButton:hover {
-  background-color: #ffd580;
+  background-color: #fcbf49;
 }
 
 .currentWord {
@@ -135,4 +135,59 @@
   padding: 0.25rem 0;
   border-bottom: 1px solid #ddd;
   break-inside: avoid;
+}
+
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* spacing between rank and timeline */
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+.rankLabel {
+  flex-shrink: 0; /* don't shrink */
+  font-weight: 600;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  width: 100px; /* fixed width or adjust to your needs */
+}
+
+.progressTrack {
+  position: relative;
+  flex-grow: 1;
+  height: 2px;
+  background-color: #eee; /* light grey bar */
+  border-radius: 4px;
+}
+
+.progressStep {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  background-color: #eee;
+  border-radius: 50%;
+  border: 2px solid #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 700;
+  cursor: default;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: #fcbf49;
+  border: 2px solid #fcbf49;
+  width: 22px;
+  height: 22px;
 }
