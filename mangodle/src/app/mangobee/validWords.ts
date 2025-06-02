@@ -7,6 +7,7 @@ export const VALID_WORDS = [
   'snap',
   'soap',
   'spam',
+  'samoas',
   'pagan',
   'panga',
   'gasp',

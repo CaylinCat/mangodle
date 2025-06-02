@@ -10,7 +10,7 @@
   position: relative;
   width: 260px;
   height: 260px;
-  margin: 2rem 0;
+  /* margin: 2rem 0; */
 }
 
 .letterCircle {
@@ -46,13 +46,14 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
+  width: 100%;
 }
 
 .actionButton {
   padding: 0.75rem 1.5rem;
   font-size: 1.2rem;
-  border: 2px solid #ddd;
+  border: 1px solid #ddd;
   border-radius: 9999px;
   background-color: white;
   color: black;
@@ -62,4 +63,76 @@
 
 .actionButton:hover {
   background-color: #ffd580;
+}
+
+.currentWord {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  /* margin-bottom: 1rem; */
+  min-height: 3rem;
+}
+
+.caret {
+  display: inline-block;
+  margin-left: 2px;
+  animation: blink 1s step-start infinite;
+  color: #fcbf49;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.mainArea {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 1rem;
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1 1 400px;
+  max-width: 400px;
+}
+
+.rightPanel {
+  width: 500px;
+  max-width: 500px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  background-color: white;
+  height: 400px;
+  overflow-y: auto;
+  font-weight: bold;
+  color: black;
+}
+
+.rightPanel ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+  font-weight: normal;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(8, 2rem);
+  grid-auto-flow: column;
+  gap: 0.25rem 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.rightPanel li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #ddd;
+  break-inside: avoid;
 }
