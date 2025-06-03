@@ -13,6 +13,7 @@ export const VALID_WORDS = [
   'stag',
   'goat',
   'gats',
+  'santa',
   'toga',
   'tang',
   'gang',

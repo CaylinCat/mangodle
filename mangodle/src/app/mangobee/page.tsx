@@ -6,7 +6,7 @@ import { VALID_WORDS } from './validWords';
 
 export default function SpellingBee() {
   const CENTER_LETTER = 'A';
-  const [letters, setLetters] = useState(['M', 'N', 'G', 'O', 'S', 'B']);
+  const [letters, setLetters] = useState(['M', 'N', 'G', 'O', 'S', 'T']);
 
   const [current, setCurrent] = useState('');
   const [foundWords, setFoundWords] = useState<string[]>([]);

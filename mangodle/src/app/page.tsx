@@ -7,10 +7,13 @@ export default function Home() {
       <h1>Welcome to Word Games!</h1>
       <ul>
         <li>
-          <Link href="/mangodle">Play Wordle</Link>
+          <Link href="/mangodle">Play Mangodle</Link>
         </li>
         <li>
-          <Link href="/mangobee">Play Spelling Bee</Link>
+          <Link href="/mangobee">Play Mango Bee</Link>
+        </li>
+        <li>
+          <Link href="/minimango">Play Mini Mango</Link>
         </li>
       </ul>
     </main>
