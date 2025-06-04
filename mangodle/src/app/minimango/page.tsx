@@ -199,24 +199,38 @@ export default function Page() {
   }
 
   function getHighlightedWordCells() {
-    const result: { row: number; col: number; }[] = [];
+    const result: { row: number; col: number }[] = [];
 
     if (!selectedCell) return result;
 
     const { row, col } = selectedCell;
     const isAcross = highlightDirection === 'across';
 
-    let start = isAcross ? col : row;
-    while (start > 0 && grid[row - (isAcross ? 0 : 1)][col - (isAcross ? 1 : 0)]) {
-      start--;
+    let startRow = row;
+    let startCol = col;
+
+    if (isAcross) {
+      while (startCol > 0 && grid[row][startCol - 1].isActive) {
+        startCol--;
+      }
+    } else {
+      while (startRow > 0 && grid[startRow - 1][col].isActive) {
+        startRow--;
+      }
     }
 
-    let i = start;
-    while (i < (isAcross ? WIDTH : HEIGHT) && grid[row + (isAcross ? 0 : i - col)][col + (isAcross ? i - col : 0)]) {
-      const r = isAcross ? row : i;
-      const c = isAcross ? i : col;
-      result.push({ row: r, col: c });
-      i++;
+    let currentRow = startRow;
+    let currentCol = startCol;
+
+    while (
+      currentRow < HEIGHT &&
+      currentCol < WIDTH &&
+      grid[currentRow][currentCol].isActive
+    ) {
+      result.push({ row: currentRow, col: currentCol });
+
+      if (isAcross) currentCol++;
+      else currentRow++;
     }
 
     return result;
