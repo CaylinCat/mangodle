@@ -67,6 +67,7 @@ export default function Page() {
   const [highlightDirection, setHighlightDirection] = useState<Direction>('across');
   const [showWinPopup, setShowWinPopup] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const grid = buildGrid(puzzle);
 
@@ -75,10 +76,10 @@ export default function Page() {
   );
 
   useEffect(() => {
-    if (showWinPopup) return;
+    if (showWinPopup || paused) return;
     const timer = setInterval(() => setElapsed(e => e + 1), 1000);
     return () => clearInterval(timer);
-  }, [showWinPopup]);
+  }, [showWinPopup, paused]);
 
   function onCellClick(row: number, col: number) {
     if (!grid[row][col].isActive) return;
@@ -209,8 +210,17 @@ export default function Page() {
             <span className={styles.date}>{dateString}</span>
           </div>
         <hr className={styles.divider} />
-        <div className={styles.timerText}>
-          {formatTime(elapsed)}
+        <div className={styles.timerRow}>
+          <div className={styles.timerText}>
+            {formatTime(elapsed)}{' '}
+          </div>
+          <button
+            className={styles.pauseButton}
+            onClick={() => setPaused(!paused)}
+            aria-label={paused ? "Resume timer" : "Pause timer"}
+          >
+            {paused ? '▶' : '⏸'}
+          </button>
         </div>
         <hr className={styles.divider} />
       </div>
