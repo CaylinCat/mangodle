@@ -194,9 +194,20 @@ export default function Page() {
       ? findClueAtCell(puzzle, selectedCell.row, selectedCell.col, highlightDirection)
       : null;
 
+  const dateString = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.timerContainer}>
+          <div className={styles.titleLine}>
+            <span className={styles.title}>🥭The Mini Mango </span>{' '}
+            <span className={styles.date}>{dateString}</span>
+          </div>
         <hr className={styles.divider} />
         <div className={styles.timerText}>
           {formatTime(elapsed)}

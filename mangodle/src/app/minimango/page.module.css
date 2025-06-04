@@ -22,8 +22,8 @@
 }
 
 .timerText {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: normal;
   margin: 0.25rem 0;
 }
 
@@ -190,4 +190,22 @@
 
 .shareButton:hover {
   background-color: #357ABD;
+}
+
+.titleLine {
+  margin-bottom: 0.5rem;
+  font-family: sans-serif;
+  text-align: left;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.date {
+  font-weight: normal;
+  font-size: 1.2rem;
+  color: #333;
+  margin-left: 1rem;
 }
