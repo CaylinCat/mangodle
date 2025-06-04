@@ -1,135 +1,190 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 
 const GRID = [
-  ['m', 'a', 'n', 'g', 'o', 'l', 'i', 'c'],
-  ['r', 'a', 'f', 'r', 'e', 's', 'h', 'i'],
-  ['c', 'n', 'o', 'p', 'i', 'c', 'a', 'l'],
-  ['y', 'i', 'o', 'o', 't', 'h', 'i', 'e'],
-  ['j', 'u', 'i', 'c', 'y', 'x', 'x', 'x'],
-  ['n', 'e', 'c', 't', 'a', 'r', 'x', 'x'],
-  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
-  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 's'],
+    ['a', 't', 'i', 's', 's', 'e'],
+    ['n', 'x', 'o', 'w', 't', 'e'],
+    ['i', 'n', 't', 'e', 'e', 'd'],
+    ['d', 'a', 'm', 'a', 's', 'u'],
+    ['t', 'l', 'u', 'g', 'n', 'o'],
+    ['r', 'o', 'f', 'o', 'i', 'c'],
+    ['p', 'i', 'd', 'e', 'l', 'd'],
+    ['c', 's', 'l', 'i', 'c', 'e'],
 ];
 
 const WORDS = [
-  'JUICY',
-  'NECTAR',
-  'TROPICAL',
-  'SMOOTHIE',
-  'REFRESHING',
-  'MANGOLICIOUS', // spangram
+    'TROPIC',
+    'SLICED',
+    'DELICIOUS',
+    'ANTIOXIDANT',
+    'SWEET',
+    'SEED',
+    'MANGOFUL', // spangram
 ];
 
 export default function MangoStrands() {
-  const [selected, setSelected] = useState<{ row: number; col: number }[]>([]);
-  const [foundPaths, setFoundPaths] = useState<{ word: string; path: { row: number; col: number }[] }[]>([]);
-  const [currentSelection, setCurrentSelection] = useState('');
-  const [lastResult, setLastResult] = useState<'valid' | 'invalid' | null>(null);
+    const [selected, setSelected] = useState<{ row: number; col: number }[]>([]);
+    const [foundPaths, setFoundPaths] = useState<{ word: string; path: { row: number; col: number }[] }[]>([]);
+    const [currentSelection, setCurrentSelection] = useState('');
+    const [lastResult, setLastResult] = useState<'valid' | 'invalid' | null>(null);
 
-  const handleMouseDown = (row: number, col: number) => {
-    setSelected([{ row, col }]);
-    setCurrentSelection(GRID[row][col].toUpperCase());
-    setLastResult(null);
-  };
-
-  const handleMouseEnter = (row: number, col: number) => {
-    if (!selected.length) return;
-
-    const last = selected[selected.length - 1];
-    const isAdjacent =
-      Math.abs(last.row - row) <= 1 &&
-      Math.abs(last.col - col) <= 1 &&
-      !(last.row === row && last.col === col);
-
-    const alreadyIncluded = selected.some(p => p.row === row && p.col === col);
-
-    if (isAdjacent && !alreadyIncluded) {
-      const newSelection = [...selected, { row, col }];
-      setSelected(newSelection);
-      const newWord = newSelection.map(({ row, col }) => GRID[row][col]).join('').toUpperCase();
-      setCurrentSelection(newWord);
-    }
-  };
-
-  const handleMouseUp = () => {
-    const word = selected.map(({ row, col }) => GRID[row][col]).join('').toUpperCase();
-
-    if (WORDS.includes(word)) {
-      setFoundPaths(prev => [...prev, { word, path: selected }]);
-      setLastResult('valid');
-      setTimeout(() => {
-        setCurrentSelection('');
+    const handleMouseDown = (row: number, col: number) => {
+        setSelected([{ row, col }]);
+        setCurrentSelection(GRID[row][col].toUpperCase());
         setLastResult(null);
-      }, 1000);
-    } else {
-      setLastResult('invalid');
-    }
+    };
 
-    setSelected([]);
-  };
+    const handleMouseEnter = (row: number, col: number) => {
+        if (!selected.length) return;
 
-  const isInPath = (row: number, col: number, path: { row: number; col: number }[]) =>
-    path.some(p => p.row === row && p.col === col);
+        const last = selected[selected.length - 1];
+        const isAdjacent =
+            Math.abs(last.row - row) <= 1 &&
+            Math.abs(last.col - col) <= 1 &&
+            !(last.row === row && last.col === col);
 
-  const getCellStyle = (row: number, col: number) => {
-    const inSelected = selected.some(p => p.row === row && p.col === col);
-    const found = foundPaths.find(({ path }) => isInPath(row, col, path));
+        const alreadyIncluded = selected.some(p => p.row === row && p.col === col);
 
-    if (found) {
-      return found.word === 'MANGOLICIOUS' ? styles.foundSpanagram : styles.found;
-    }
+        if (isAdjacent && !alreadyIncluded) {
+            const newSelection = [...selected, { row, col }];
+            setSelected(newSelection);
+            const newWord = newSelection.map(({ row, col }) => GRID[row][col]).join('').toUpperCase();
+            setCurrentSelection(newWord);
+        }
+    };
 
-    if (inSelected) return styles.selected;
+    const handleMouseUp = () => {
+        const word = selected.map(({ row, col }) => GRID[row][col]).join('').toUpperCase();
 
-    return '';
-  };
+        if (WORDS.includes(word)) {
+            setFoundPaths(prev => [...prev, { word, path: selected }]);
+            setLastResult('valid');
+            setTimeout(() => {
+                setCurrentSelection('');
+                setLastResult(null);
+            }, 1000);
+        } else {
+            setLastResult('invalid');
+        }
 
-  return (
-    <div className={styles.container} onMouseUp={handleMouseUp}>
-      <div className={styles.leftPanel}>
-        <div className={styles.themeBox}>
-          <div className={styles.themeTitle}>Today's Theme</div>
-          <div className={styles.theme}>Mangos</div>
-          <div className={styles.progress}>
-            {foundPaths.length} of {WORDS.length} theme words found.
-          </div>
-          <button className={styles.hintButton}>Hint</button>
-        </div>
-      </div>
+        setSelected([]);
+    };
 
-      <div className={styles.gameArea}>
-        <div className={styles.preview}>
-          {currentSelection && lastResult === null && (
-            <span>{currentSelection}</span>
-          )}
-          {lastResult === 'valid' && (
-            <span className={styles.validWord}>{currentSelection}</span>
-          )}
-          {lastResult === 'invalid' && (
-            <span className={styles.invalidWord}>Not a Valid Word</span>
-          )}
-        </div>
+    const isInPath = (row: number, col: number, path: { row: number; col: number }[]) =>
+        path.some(p => p.row === row && p.col === col);
 
-        <div className={styles.grid}>
-          {GRID.map((row, rowIndex) => (
-            <div key={rowIndex} className={styles.gridRow}>
-              {row.map((letter, colIndex) => (
-                <div
-                  key={colIndex}
-                  className={`${styles.cell} ${getCellStyle(rowIndex, colIndex)}`}
-                  onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
-                  onMouseEnter={(e) => e.buttons === 1 && handleMouseEnter(rowIndex, colIndex)}
-                >
-                  {letter}
+    const getCellStyle = (row: number, col: number) => {
+        const inSelected = selected.some(p => p.row === row && p.col === col);
+        const found = foundPaths.find(({ path }) => isInPath(row, col, path));
+
+        if (found) {
+            return found.word === 'MANGOLICIOUS' ? styles.foundSpanagram : styles.found;
+        }
+
+        if (inSelected) return styles.selected;
+
+        return '';
+    };
+
+    const cellSize = 40;
+    const gapX = 0; // horizontal gap between cells (from CSS)
+    const gapY = 4; // vertical gap between rows (from CSS)
+    const cellCenterOffset = cellSize / 2;
+
+    const renderLines = (path: { row: number; col: number }[], animate: boolean) => {
+        if (path.length < 2) return null;
+
+        return path.slice(1).map((pos, i) => {
+            const from = path[i];
+            const to = pos;
+
+            const x1 = from.col * (cellSize + gapX) + cellCenterOffset;
+            const y1 = from.row * (cellSize + gapY) + cellCenterOffset;
+            const x2 = to.col * (cellSize + gapX) + cellCenterOffset;
+            const y2 = to.row * (cellSize + gapY) + cellCenterOffset;
+
+            return (
+                <line
+                    key={`${from.row}-${from.col}-${to.row}-${to.col}`}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    className={animate ? styles.animatedLine : styles.staticLine}
+                    stroke="#ffa500"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                />
+            );
+        });
+    };
+
+
+    return (
+        <div className={styles.container} onMouseUp={handleMouseUp}>
+
+            <div className={styles.leftPanel}>
+                <div className={styles.themeBox}>
+                    <div className={styles.themeTitle}>Today's Theme</div>
+                    <div className={styles.theme}>Mangos</div>
+                    <div className={styles.progress}>
+                        {foundPaths.length} of {WORDS.length} theme words found.
+                    </div>
+                    <button className={styles.hintButton}>Hint</button>
                 </div>
-              ))}
             </div>
-          ))}
+
+            <div className={styles.gameArea}>
+                <div className={styles.preview}>
+                    {currentSelection && lastResult === null && (
+                        <span>{currentSelection}</span>
+                    )}
+                    {lastResult === 'valid' && (
+                        <span className={styles.validWord}>{currentSelection}</span>
+                    )}
+                    {lastResult === 'invalid' && (
+                        <span className={styles.invalidWord}>Not a Valid Word</span>
+                    )}
+                </div>
+
+                <div className={styles.grid} style={{ position: 'relative', width: cellSize * GRID[0].length, height: cellSize * GRID.length }}>
+                    {/* SVG overlay for tracing lines */}
+                    <svg
+                        className={styles.svgOverlay}
+                        width={cellSize * GRID[0].length}
+                        height={cellSize * GRID.length}
+                    >
+                        {/* Lines for current selection (animated) */}
+                        {renderLines(selected, true)}
+
+                        {/* Lines for found words (static) */}
+                        {foundPaths.map(({ path }, i) => (
+                            <g key={`found-${i}`}>
+                                {renderLines(path, false)}
+                            </g>
+                        ))}
+                    </svg>
+
+                    {/* Grid cells */}
+                    {GRID.map((row, rowIndex) => (
+                        <div key={rowIndex} className={styles.gridRow}>
+                            {row.map((letter, colIndex) => (
+                                <div
+                                    key={colIndex}
+                                    className={`${styles.cell} ${getCellStyle(rowIndex, colIndex)}`}
+                                    onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                                    onMouseEnter={(e) => e.buttons === 1 && handleMouseEnter(rowIndex, colIndex)}
+                                    style={{ width: cellSize, height: cellSize, lineHeight: `${cellSize}px` }}
+                                >
+                                    {letter}
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

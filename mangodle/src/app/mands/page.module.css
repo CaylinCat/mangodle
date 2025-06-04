@@ -67,11 +67,23 @@
   align-items: center;
   justify-content: center;
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
 }
+
+/* .cell.foundSpanagram {
+  box-shadow: 0 0 0 2px #ffd54f inset;
+}
+
+.cell.found {
+  box-shadow: 0 0 0 2px blue inset;
+}
+
+.cell.selected {
+    box-shadow: 0 0 0 2px grey inset;
+} */
 
 .selected {
   background-color: #ffecb3;
@@ -129,4 +141,115 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Add a container for the grid to use relative positioning */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative; /* for absolute positioning connection lines */
+}
+
+/* Connecting line between selected adjacent cells */
+.connection-line {
+  position: absolute;
+  background-color: #ffd54f; /* same as selected border color */
+  animation: traceLine 0.3s ease forwards;
+  border-radius: 2px;
+  z-index: 1; /* behind letters */
+  pointer-events: none; /* ignore mouse events */
+}
+
+/* Horizontal connection line */
+.connection-line.horizontal {
+  height: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Vertical connection line */
+.connection-line.vertical {
+  width: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Diagonal connection line (45 degrees) */
+.connection-line.diagonal {
+  width: 6px;
+  height: 6px;
+  top: 50%;
+  left: 50%;
+  background-color: #ffd54f;
+  transform-origin: center;
+  border-radius: 2px;
+  /* rotated to match diagonal direction, adjust rotation in JS */
+}
+
+/* Animation for the connecting line: fading and growing */
+@keyframes traceLine {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* Keep your existing selected cell animation */
+@keyframes trace {
+  0% {
+    transform: scale(1.2);
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+  }
+  100% {
+    transform: scale(1);
+    background-color: #ffecb3;
+    border-color: #ffd54f;
+  }
+}
+
+.selected {
+  background-color: #ffecb3;
+  border-color: #ffd54f;
+  animation: trace 0.2s ease;
+}
+
+/* z-index layering for cells to be above lines */
+.cell {
+  position: relative;
+  z-index: 10;
+}
+
+/* Make sure SVG overlay is positioned absolutely and on top of grid */
+.svgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* so mouse events pass through */
+  z-index: 5; /* under .cell which has z-index 10 */
+}
+
+/* For animated lines */
+.animatedLine {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: dash 0.3s forwards;
+}
+
+/* For static lines (found words) */
+.staticLine {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+}
+
+/* Dash animation for lines */
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
