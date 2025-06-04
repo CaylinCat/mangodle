@@ -1,0 +1,132 @@
+.container {
+  display: flex;
+  padding: 40px;
+  justify-content: center;
+  gap: 40px;
+  user-select: none;
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.themeBox {
+  background-color: #eaf6fb;
+  border-radius: 12px;
+  padding: 20px 30px;
+  width: 200px;
+  text-align: center;
+}
+
+.themeTitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.theme {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.progress {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.hintButton {
+  padding: 8px 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gridRow {
+  display: flex;
+  gap: 8px;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.selected {
+  background-color: #ffecb3;
+  border-color: #ffd54f;
+}
+
+.found {
+  background-color: #c5e1f9;
+  border-color: #90caf9;
+}
+
+.foundSpanagram {
+  background-color: #ffe082;
+  border-color: #ffca28;
+}
+
+@keyframes trace {
+  0% {
+    transform: scale(1.2);
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+  }
+  100% {
+    transform: scale(1);
+    background-color: #ffecb3;
+    border-color: #ffd54f;
+  }
+}
+
+.selected {
+  background-color: #ffecb3;
+  border-color: #ffd54f;
+  animation: trace 0.2s ease;
+}
+
+.preview {
+  height: 40px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.validWord {
+  color: royalblue;
+  transition: color 0.3s ease;
+}
+
+.invalidWord {
+  color: crimson;
+  transition: opacity 0.3s ease;
+}
+
+.gameArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

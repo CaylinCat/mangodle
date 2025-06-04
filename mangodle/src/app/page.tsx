@@ -15,6 +15,9 @@ export default function Home() {
         <li>
           <Link href="/minimango">Play Mini Mango</Link>
         </li>
+        <li>
+          <Link href="/mands">Play Mands</Link>
+        </li>
       </ul>
     </main>
   );
