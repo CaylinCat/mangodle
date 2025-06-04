@@ -112,6 +112,7 @@ export default function Page() {
   }
 
   function handleChange(row: number, col: number, val: string) {
+    if (correctCells.has(`${row},${col}`)) return;
     const letter = val.toUpperCase().slice(-1);
     if (!/^[A-Z]?$/.test(letter)) return;
 
@@ -155,6 +156,7 @@ export default function Page() {
 
     if (e.key === 'Backspace') {
       e.preventDefault();
+      if (correctCells.has(`${row},${col}`)) return;
       if (inputs[row][col]) {
         setInputs(prev => {
           const updated = prev.map(r => [...r]);
@@ -163,6 +165,7 @@ export default function Page() {
         });
       } else if (idx > 0) {
         const [prevR, prevC] = cells[idx - 1];
+        if (correctCells.has(`${prevR},${prevC}`)) return;
         setInputs(prev => {
           const updated = prev.map(r => [...r]);
           updated[prevR][prevC] = '';
