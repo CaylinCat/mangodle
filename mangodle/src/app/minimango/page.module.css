@@ -2,13 +2,56 @@
   padding: 2rem;
   font-family: sans-serif;
   text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timerContainer {
+  margin: 0.5rem 0;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid black;
+  margin: 0.25rem auto;
+  width: 100%;
+}
+
+.timerText {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0.25rem 0;
 }
 
 .container {
+  flex: 1;
   display: flex;
-  justify-content: center;
   gap: 2rem;
-  flex-wrap: wrap;
+  height: 100%;
+  padding: 0 1rem;
+}
+
+.leftPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  min-width: 300px;
+}
+
+.selectedClue {
+  background-color: #d0ebff;
+  padding: 0.5rem 1rem;
+  font-weight: normal;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .grid {
@@ -16,6 +59,8 @@
   grid-template-columns: repeat(5, 40px);
   grid-template-rows: repeat(5, 40px);
   gap: 2px;
+  justify-content: start;
+  flex-shrink: 0;
 }
 
 .cell {
@@ -50,17 +95,31 @@
   color: black;
 }
 
-.clues {
+.rightPanel {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  min-width: 300px;
+}
+
+.cluesColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow-y: auto;
   text-align: left;
-  max-width: 300px;
+  padding: 0 1rem;
+  background: transparent;
+  border: none;
+  outline: none;
 }
 
-.sectionTitle {
-  margin-top: 1rem;
-}
-
-.listitem {
-  padding-left: 1rem;
+.cluesColumn h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid black;
+  padding-bottom: 0.25rem;
 }
 
 .highlighted-across {
@@ -73,5 +132,12 @@
 
 .activeClue {
   background-color: #e0f7ff;
-  font-weight: bold;
+  font-weight: normal;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.cluePrefix {
+  margin-right: 0.5rem;
 }

@@ -64,12 +64,18 @@ export default function Page() {
   );
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [highlightDirection, setHighlightDirection] = useState<Direction>('across');
+  const [elapsed, setElapsed] = useState(0);
 
   const grid = buildGrid(puzzle);
 
   const inputRefs = useRef<(HTMLInputElement | null)[][]>(
     Array.from({ length: HEIGHT }, () => Array.from({ length: WIDTH }, () => null))
   );
+
+  useEffect(() => {
+    const timer = setInterval(() => setElapsed(e => e + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   function onCellClick(row: number, col: number) {
     if (!grid[row][col].isActive) return;
@@ -158,56 +164,94 @@ export default function Page() {
     return clue?.number === clueNumber;
   }
 
+  const selectedClue =
+    selectedCell && highlightDirection
+      ? findClueAtCell(puzzle, selectedCell.row, selectedCell.col, highlightDirection)
+      : null;
+
   return (
     <div className={styles.wrapper}>
-      <h1>Mango Mini Crossword 🥭</h1>
-      <div className={styles.container}>
-        <div className={styles.grid}>
-          {grid.map((rowArr, r) =>
-            rowArr.map((cell, c) => {
-              const { across, down } = isCellHighlighted(r, c);
-              const highlightClass = across
-                ? styles['highlighted-across']
-                : down
-                ? styles['highlighted-down']
-                : '';
+      <div className={styles.timerContainer}>
+        <hr className={styles.divider} />
+        <div className={styles.timerText}>
+          {`${Math.floor(elapsed / 60).toString().padStart(2, '0')}:${(elapsed % 60)
+            .toString()
+            .padStart(2, '0')}`}
+        </div>
+        <hr className={styles.divider} />
+      </div>
 
-              return (
-                <div
-                  key={`${r}-${c}`}
-                  className={`${styles.cell} ${!cell.isActive ? styles.blocked : ''} ${highlightClass}`}
-                  onClick={() => onCellClick(r, c)}
-                >
-                  {cell.number && <div className={styles.number}>{cell.number}</div>}
-                  {cell.isActive && (
-                    <input
-                      ref={el => {
-                        inputRefs.current[r][c] = el;
-                      }}
-                      type="text"
-                      maxLength={1}
-                      className={styles.input}
-                      value={inputs[r][c]}
-                      onChange={e => handleChange(r, c, e.target.value)}
-                      onKeyDown={e => handleKeyDown(e, r, c)}
-                      pattern="[A-Za-z]"
-                      autoComplete="off"
-                    />
-                  )}
-                </div>
-              );
-            })
-          )}
+      <div className={styles.container}>
+        <div className={styles.leftPanel}>
+          <div className={styles.selectedClue}>
+            {selectedClue ? (
+              <>
+                <strong className={styles.cluePrefix}>
+                  {selectedClue.number}
+                  {highlightDirection === 'across' ? 'A' : 'D'}
+                </strong>
+                {selectedClue.clue}
+              </>
+            ) : (
+              'Select a cell to see clue'
+            )}
+          </div>
+          <div className={styles.grid}>
+            {grid.map((rowArr, r) =>
+              rowArr.map((cell, c) => {
+                const { across, down } = isCellHighlighted(r, c);
+                const highlightClass = across
+                  ? styles['highlighted-across']
+                  : down
+                  ? styles['highlighted-down']
+                  : '';
+
+                return (
+                  <div
+                    key={`${r}-${c}`}
+                    className={`${styles.cell} ${!cell.isActive ? styles.blocked : ''} ${highlightClass}`}
+                    onClick={() => onCellClick(r, c)}
+                  >
+                    {cell.number && <div className={styles.number}>{cell.number}</div>}
+                    {cell.isActive && (
+                      <input
+                        ref={el => {
+                          inputRefs.current[r][c] = el;
+                        }}
+                        type="text"
+                        maxLength={1}
+                        className={styles.input}
+                        value={inputs[r][c]}
+                        onChange={e => handleChange(r, c, e.target.value)}
+                        onKeyDown={e => handleKeyDown(e, r, c)}
+                        pattern="[A-Za-z]"
+                        autoComplete="off"
+                      />
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
 
-        <div className={styles.clues}>
-          <div>
+        <div className={styles.rightPanel}>
+          <div className={styles.cluesColumn}>
             <h3>Across</h3>
             <ul>
               {puzzle.across.map(clue => (
                 <li
                   key={clue.number}
                   className={isClueActive('across', clue.number) ? styles.activeClue : ''}
+                  onClick={() => {
+                    setHighlightDirection('across');
+                    setSelectedCell({ row: clue.row, col: clue.col });
+                    setTimeout(() => {
+                      inputRefs.current[clue.row][clue.col]?.focus();
+                      inputRefs.current[clue.row][clue.col]?.select();
+                    }, 0);
+                  }}
+                  style={{ cursor: 'pointer' }}
                 >
                   <strong>{clue.number}</strong>. {clue.clue}
                 </li>
@@ -215,13 +259,22 @@ export default function Page() {
             </ul>
           </div>
 
-          <div>
+          <div className={styles.cluesColumn}>
             <h3>Down</h3>
             <ul>
               {puzzle.down.map(clue => (
                 <li
                   key={clue.number}
                   className={isClueActive('down', clue.number) ? styles.activeClue : ''}
+                  onClick={() => {
+                    setHighlightDirection('down');
+                    setSelectedCell({ row: clue.row, col: clue.col });
+                    setTimeout(() => {
+                      inputRefs.current[clue.row][clue.col]?.focus();
+                      inputRefs.current[clue.row][clue.col]?.select();
+                    }, 0);
+                  }}
+                  style={{ cursor: 'pointer' }}
                 >
                   <strong>{clue.number}</strong>. {clue.clue}
                 </li>
