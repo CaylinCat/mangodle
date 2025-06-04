@@ -68,6 +68,10 @@ export default function Page() {
   const [showWinPopup, setShowWinPopup] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [correctCells, setCorrectCells] = useState(new Set());
+  const [showDropdown, setShowDropdown] = useState(false);
+
+
 
   const grid = buildGrid(puzzle);
 
@@ -190,6 +194,61 @@ export default function Page() {
     return clue?.number === clueNumber;
   }
 
+  function markCorrect(row: any, col: any) {
+    setCorrectCells(prev => new Set(prev).add(`${row},${col}`));
+  }
+
+  function getHighlightedWordCells() {
+    const result: { row: number; col: number; }[] = [];
+
+    if (!selectedCell) return result;
+
+    const { row, col } = selectedCell;
+    const isAcross = highlightDirection === 'across';
+
+    let start = isAcross ? col : row;
+    while (start > 0 && grid[row - (isAcross ? 0 : 1)][col - (isAcross ? 1 : 0)]) {
+      start--;
+    }
+
+    let i = start;
+    while (i < (isAcross ? WIDTH : HEIGHT) && grid[row + (isAcross ? 0 : i - col)][col + (isAcross ? i - col : 0)]) {
+      const r = isAcross ? row : i;
+      const c = isAcross ? i : col;
+      result.push({ row: r, col: c });
+      i++;
+    }
+
+    return result;
+  }
+
+  function handleCheckSquare() {
+    if (!selectedCell) return;
+    const { row, col } = selectedCell;
+    if (inputs[row][col] === grid[row][col].letter) {
+      markCorrect(row, col);
+    }
+  }
+
+  function handleCheckWord() {
+    const wordCells = getHighlightedWordCells();
+    wordCells.forEach(({ row, col }) => {
+      if (inputs[row][col] === grid[row][col].letter) {
+        markCorrect(row, col);
+      }
+    });
+  }
+
+  function handleCheckPuzzle() {
+    for (let r = 0; r < HEIGHT; r++) {
+      for (let c = 0; c < WIDTH; c++) {
+        if (inputs[r][c] === grid[r][c].letter) {
+          markCorrect(r, c);
+        }
+      }
+    }
+  }
+
   const selectedClue =
     selectedCell && highlightDirection
       ? findClueAtCell(puzzle, selectedCell.row, selectedCell.col, highlightDirection)
@@ -211,16 +270,33 @@ export default function Page() {
           </div>
         <hr className={styles.divider} />
         <div className={styles.timerRow}>
-          <div className={styles.timerText}>
-            {formatTime(elapsed)}{' '}
+          <div className={styles.centerGroup}>
+            <div className={styles.timerText}>
+              {formatTime(elapsed)}{' '}
+            </div>
+            <button
+              className={styles.pauseButton}
+              onClick={() => setPaused(!paused)}
+              aria-label={paused ? "Resume timer" : "Pause timer"}
+            >
+              {paused ? '▶' : '⏸'}
+            </button>
           </div>
-          <button
-            className={styles.pauseButton}
-            onClick={() => setPaused(!paused)}
-            aria-label={paused ? "Resume timer" : "Pause timer"}
-          >
-            {paused ? '▶' : '⏸'}
-          </button>
+           <div className={styles.checkDropdown}>
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className={styles.checkButton}
+            >
+              Check
+            </button>
+            {showDropdown && (
+              <div className={styles.dropdownMenu}>
+                <div onClick={handleCheckSquare}>Square</div>
+                <div onClick={handleCheckWord}>Word</div>
+                <div onClick={handleCheckPuzzle}>Puzzle</div>
+              </div>
+            )}
+          </div>
         </div>
         <hr className={styles.divider} />
       </div>
@@ -259,12 +335,13 @@ export default function Page() {
                     {cell.number && <div className={styles.number}>{cell.number}</div>}
                     {cell.isActive && (
                       <input
+                        className={`${styles.input} ${correctCells.has(`${r},${c}`) ? styles.correctLetter : ''}`}
                         ref={el => {
                           inputRefs.current[r][c] = el;
                         }}
                         type="text"
                         maxLength={1}
-                        className={styles.input}
+                        // className={styles.input}
                         value={inputs[r][c]}
                         onChange={e => handleChange(r, c, e.target.value)}
                         onKeyDown={e => handleKeyDown(e, r, c)}

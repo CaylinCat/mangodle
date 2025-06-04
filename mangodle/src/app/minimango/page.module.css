@@ -80,7 +80,7 @@
 .input {
   width: 100%;
   height: 100%;
-  font-size: 1.2rem;
+  font-size: 2rem;
   text-align: center;
   border: none;
   outline: none;
@@ -224,7 +224,56 @@
 }
 
 .timerRow {
+  position: relative;
+  height: 40px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: 0 1rem;
+}
+
+.correctLetter {
+  color: goldenrod;
+}
+
+.checkDropdown {
+  position: relative;
+  margin-left: auto;
+}
+
+.checkButton {
+  all: unset;
+  font-size: 0.9rem;
+  color: #000;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #787c7e;
+  border-radius: 6px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  font-size: 0.9rem;
+  z-index: 1000;
+}
+
+.dropdownMenu div {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dropdownMenu div:hover {
+  background-color: #f0f0f0;
+}
+
+.centerGroup {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
