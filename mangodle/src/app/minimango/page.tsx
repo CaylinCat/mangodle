@@ -25,6 +25,7 @@ function buildGrid(clues: typeof puzzle) {
       const row = clue.row + (isAcross ? 0 : i);
       const col = clue.col + (isAcross ? i : 0);
       grid[row][col].isActive = true;
+      grid[row][col].letter = clue.answer[i].toUpperCase();
       if (i === 0) grid[row][col].number = clue.number;
     }
   };
@@ -64,6 +65,7 @@ export default function Page() {
   );
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [highlightDirection, setHighlightDirection] = useState<Direction>('across');
+  const [showWinPopup, setShowWinPopup] = useState(false);
   const [elapsed, setElapsed] = useState(0);
 
   const grid = buildGrid(puzzle);
@@ -73,9 +75,10 @@ export default function Page() {
   );
 
   useEffect(() => {
+    if (showWinPopup) return;
     const timer = setInterval(() => setElapsed(e => e + 1), 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [showWinPopup]);
 
   function onCellClick(row: number, col: number) {
     if (!grid[row][col].isActive) return;
@@ -92,13 +95,29 @@ export default function Page() {
     }, 0);
   }
 
+  function checkWin(inputsToCheck: string[][] = inputs) {
+    for (let r = 0; r < HEIGHT; r++) {
+      for (let c = 0; c < WIDTH; c++) {
+        if (grid[r][c].isActive && inputsToCheck[r][c] !== grid[r][c].letter.toUpperCase()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   function handleChange(row: number, col: number, val: string) {
     const letter = val.toUpperCase().slice(-1);
     if (!/^[A-Z]?$/.test(letter)) return;
 
     setInputs(prev => {
-      const updated = prev.map(row => [...row]);
+      const updated = prev.map(r => [...r]);
       updated[row][col] = letter;
+
+      if (checkWin(updated)) {
+        setShowWinPopup(true);
+      }
+
       return updated;
     });
 
@@ -133,14 +152,14 @@ export default function Page() {
       e.preventDefault();
       if (inputs[row][col]) {
         setInputs(prev => {
-          const updated = prev.map(row => [...row]);
+          const updated = prev.map(r => [...r]);
           updated[row][col] = '';
           return updated;
         });
       } else if (idx > 0) {
         const [prevR, prevC] = cells[idx - 1];
         setInputs(prev => {
-          const updated = prev.map(row => [...row]);
+          const updated = prev.map(r => [...r]);
           updated[prevR][prevC] = '';
           return updated;
         });
@@ -156,6 +175,12 @@ export default function Page() {
     const cells = clue ? getClueCells(clue, highlightDirection) : [];
     const isHighlight = cells.some(([r, c]) => r === row && c === col);
     return { [highlightDirection!]: isHighlight };
+  }
+
+  function formatTime(seconds: number) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
   }
 
   function isClueActive(dir: Direction, clueNumber: number) {
@@ -174,9 +199,7 @@ export default function Page() {
       <div className={styles.timerContainer}>
         <hr className={styles.divider} />
         <div className={styles.timerText}>
-          {`${Math.floor(elapsed / 60).toString().padStart(2, '0')}:${(elapsed % 60)
-            .toString()
-            .padStart(2, '0')}`}
+          {formatTime(elapsed)}
         </div>
         <hr className={styles.divider} />
       </div>
@@ -283,6 +306,26 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      {showWinPopup && (
+        <div className={styles.popupOverlay} onClick={() => setShowWinPopup(false)}>
+          <div className={styles.popup} onClick={e => e.stopPropagation()}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🥭</div>
+            <h2>Congratulations!</h2>
+            <p>You solved MiniMango in {formatTime(elapsed)}.</p>
+            <button
+              className={styles.shareButton}
+              onClick={() => {
+                const shareText = `MiniMango 🥭\nSolved in ${formatTime(elapsed)}!`;
+                navigator.clipboard.writeText(shareText);
+                alert('Result copied to clipboard!');
+              }}
+            >
+              Click to share
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
