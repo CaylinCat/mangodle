@@ -80,7 +80,7 @@ export default function MangoStrands() {
         const found = foundPaths.find(({ path }) => isInPath(row, col, path));
 
         if (found) {
-            return found.word === 'MANGOLICIOUS' ? styles.foundSpanagram : styles.found;
+            return found.word === 'MANGOFUL' ? styles.foundSpanagram : styles.found;
         }
 
         if (inSelected) return styles.selected;
@@ -96,7 +96,7 @@ export default function MangoStrands() {
     const svgHeight = GRID.length * cellSize + (GRID.length - 1) * gapY;
 
 
-    const renderLines = (path: { row: number; col: number }[], animate: boolean) => {
+    const renderLines = (path: any[], animate: boolean, isSpanagram = false) => {
         if (path.length < 2) return null;
 
         return path.slice(1).map((pos, i) => {
@@ -109,17 +109,14 @@ export default function MangoStrands() {
             const y2 = to.row * (cellSize + gapY) + cellCenterOffset;
 
             return (
-                <line
-                    key={`${from.row}-${from.col}-${to.row}-${to.col}`}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
-                    className={animate ? styles.animatedLine : styles.staticLine}
-                    stroke="#ffa500"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                />
+            <line
+                key={`${from.row}-${from.col}-${to.row}-${to.col}`}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                className={isSpanagram ? styles.spanagramLine : (animate ? styles.animatedLine : styles.staticLine)}
+            />
             );
         });
     };
@@ -165,10 +162,10 @@ export default function MangoStrands() {
                         {renderLines(selected, true)}
 
                         {/* Lines for found words (static) */}
-                        {foundPaths.map(({ path }, i) => (
-                            <g key={`found-${i}`}>
-                                {renderLines(path, false)}
-                            </g>
+                        {foundPaths.map(({ word, path }, i) => (
+                        <g key={`found-${i}`}>
+                            {renderLines(path, false, word === 'MANGOFUL')} 
+                        </g>
                         ))}
                     </svg>
 
