@@ -90,14 +90,9 @@
     box-shadow: 0 0 0 2px grey inset;
 } */
 
-.selected {
+.found {
   background-color: #ffecb3;
   border-color: #ffd54f;
-}
-
-.found {
-  background-color: #c5e1f9;
-  border-color: #90caf9;
 }
 
 .foundSpanagram {
@@ -108,19 +103,19 @@
 @keyframes trace {
   0% {
     transform: scale(1.2);
-    background-color: #fff3cd;
-    border-color: #ffeeba;
+    background-color: #ede9d8;
+    border-color: #d9d5c5;
   }
   100% {
     transform: scale(1);
-    background-color: #ffecb3;
-    border-color: #ffd54f;
+    background-color: #ede9d8;
+    border-color: #d9d5c5;
   }
 }
 
 .selected {
-  background-color: #ffecb3;
-  border-color: #ffd54f;
+  background-color: #ede9d8;
+  border-color: #d9d5c5;
   animation: trace 0.2s ease;
 }
 
@@ -196,26 +191,6 @@
   }
 }
 
-/* Keep your existing selected cell animation */
-@keyframes trace {
-  0% {
-    transform: scale(1.2);
-    background-color: #fff3cd;
-    border-color: #ffeeba;
-  }
-  100% {
-    transform: scale(1);
-    background-color: #ffecb3;
-    border-color: #ffd54f;
-  }
-}
-
-.selected {
-  background-color: #ffecb3;
-  border-color: #ffd54f;
-  animation: trace 0.2s ease;
-}
-
 /* Make sure SVG overlay is positioned absolutely and on top of grid */
 .svgOverlay {
   position: absolute;
@@ -227,6 +202,7 @@
 
 /* For animated lines */
 .animatedLine {
+  stroke: #ede9d8;
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
   animation: dash 0.3s forwards;
@@ -234,6 +210,7 @@
 
 /* For static lines (found words) */
 .staticLine {
+  stroke: #ffecb3;
   stroke-dasharray: none;
   stroke-dashoffset: 0;
 }

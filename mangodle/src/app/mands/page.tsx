@@ -17,7 +17,7 @@ const GRID = [
 const WORDS = [
     'TROPIC',
     'SLICED',
-    'DELICIOUS',
+    'DELICOUS',
     'ANTIOXIDANT',
     'SWEET',
     'SEED',
