@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 
 const GRID = [
-    ['a', 't', 'i', 's', 's', 'e'],
-    ['n', 'x', 'o', 'w', 't', 'e'],
-    ['i', 'n', 't', 'e', 'e', 'd'],
-    ['d', 'a', 'm', 'a', 's', 'u'],
-    ['t', 'l', 'u', 'g', 'n', 'o'],
-    ['r', 'o', 'f', 'o', 'i', 'c'],
-    ['p', 'i', 'd', 'e', 'l', 'd'],
-    ['c', 's', 'l', 'i', 'c', 'e'],
+    ['A', 'T', 'I', 'S', 'S', 'E'],
+    ['N', 'X', 'O', 'W', 'T', 'E'],
+    ['I', 'N', 'T', 'E', 'E', 'D'],
+    ['D', 'A', 'M', 'A', 'S', 'U'],
+    ['T', 'L', 'U', 'G', 'N', 'O'],
+    ['R', 'O', 'F', 'O', 'I', 'C'],
+    ['P', 'I', 'D', 'E', 'L', 'D'],
+    ['C', 'S', 'L', 'I', 'C', 'E'],
 ];
 
 const WORDS = [
@@ -89,9 +89,12 @@ export default function MangoStrands() {
     };
 
     const cellSize = 40;
-    const gapX = 0; // horizontal gap between cells (from CSS)
-    const gapY = 4; // vertical gap between rows (from CSS)
+    const gapX = 10; //horizontal gap between cells
+    const gapY = 10; //vertical gap between cells
     const cellCenterOffset = cellSize / 2;
+    const svgWidth = GRID[0].length * cellSize + (GRID[0].length - 1) * gapX;
+    const svgHeight = GRID.length * cellSize + (GRID.length - 1) * gapY;
+
 
     const renderLines = (path: { row: number; col: number }[], animate: boolean) => {
         if (path.length < 2) return null;
@@ -153,8 +156,10 @@ export default function MangoStrands() {
                     {/* SVG overlay for tracing lines */}
                     <svg
                         className={styles.svgOverlay}
-                        width={cellSize * GRID[0].length}
-                        height={cellSize * GRID.length}
+                        // width={cellSize * GRID[0].length}
+                        // height={cellSize * GRID.length}
+                        width={svgWidth}
+                        height={svgHeight}
                     >
                         {/* Lines for current selection (animated) */}
                         {renderLines(selected, true)}
@@ -176,7 +181,7 @@ export default function MangoStrands() {
                                     className={`${styles.cell} ${getCellStyle(rowIndex, colIndex)}`}
                                     onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
                                     onMouseEnter={(e) => e.buttons === 1 && handleMouseEnter(rowIndex, colIndex)}
-                                    style={{ width: cellSize, height: cellSize, lineHeight: `${cellSize}px` }}
+                                    style={{ width: cellSize, height: cellSize }}
                                 >
                                     {letter}
                                 </div>

@@ -50,20 +50,23 @@
 .grid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
+  position: relative;
 }
 
 .gridRow {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .cell {
   width: 40px;
-  height: 40px;
-  font-size: 20px;
-  font-weight: bold;
+  height: 20px;
+  font-size: 22px;
+  font-weight: normal;
   display: flex;
+  position: relative;
+  z-index: 10;
   align-items: center;
   justify-content: center;
   background-color: white;
@@ -71,6 +74,8 @@
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
+  /* margin: 2px; */
+  aspect-ratio: 1 / 1;
 }
 
 /* .cell.foundSpanagram {
@@ -143,14 +148,6 @@
   align-items: center;
 }
 
-/* Add a container for the grid to use relative positioning */
-.grid {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  position: relative; /* for absolute positioning connection lines */
-}
-
 /* Connecting line between selected adjacent cells */
 .connection-line {
   position: absolute;
@@ -217,12 +214,6 @@
   background-color: #ffecb3;
   border-color: #ffd54f;
   animation: trace 0.2s ease;
-}
-
-/* z-index layering for cells to be above lines */
-.cell {
-  position: relative;
-  z-index: 10;
 }
 
 /* Make sure SVG overlay is positioned absolutely and on top of grid */
