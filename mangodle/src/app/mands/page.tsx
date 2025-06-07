@@ -29,6 +29,7 @@ export default function MangoStrands() {
     const [foundPaths, setFoundPaths] = useState<{ word: string; path: { row: number; col: number }[] }[]>([]);
     const [currentSelection, setCurrentSelection] = useState('');
     const [lastResult, setLastResult] = useState<'valid' | 'invalid' | null>(null);
+    const [hintedPath, setHintedPath] = useState<{ row: number; col: number }[] | null>(null);
 
     const handleMouseDown = (row: number, col: number) => {
         setSelected([{ row, col }]);
@@ -72,12 +73,30 @@ export default function MangoStrands() {
         setSelected([]);
     };
 
+    const handleHintClick = () => {
+        const foundWordsSet = new Set(foundPaths.map(fp => fp.word));
+        const notFoundWord = WORDS.find(w => !foundWordsSet.has(w));
+
+        if (!notFoundWord) {
+            setHintedPath(null);
+            return;
+        }
+
+        const path = findWordPath(notFoundWord);
+        if (path) setHintedPath(path);
+    };
+
     const isInPath = (row: number, col: number, path: { row: number; col: number }[]) =>
         path.some(p => p.row === row && p.col === col);
 
     const getCellStyle = (row: number, col: number) => {
         const inSelected = selected.some(p => p.row === row && p.col === col);
         const found = foundPaths.find(({ path }) => isInPath(row, col, path));
+        const isHint = hintedPath && isInPath(row, col, hintedPath);
+
+        // if (inSelected && isHint) return `${styles.selected} ${styles.hinted}`;
+        if (inSelected) return styles.selected;
+        if (isHint) return styles.hinted;
 
         if (found) {
             return found.word === 'MANGOFUL' ? styles.foundSpanagram : styles.found;
@@ -121,6 +140,17 @@ export default function MangoStrands() {
         });
     };
 
+    useEffect(() => {
+        if (!hintedPath) return;
+
+        const hintedWordFound = foundPaths.some(({ path }) =>
+            hintedPath.every(p1 => path.some(p2 => p1.row === p2.row && p1.col === p2.col))
+        );
+
+        if (hintedWordFound) {
+            setHintedPath(null);
+        }
+    }, [foundPaths, hintedPath]);
 
     return (
         <div className={styles.container} onMouseUp={handleMouseUp}>
@@ -132,7 +162,7 @@ export default function MangoStrands() {
                     <div className={styles.progress}>
                         {foundPaths.length} of {WORDS.length} theme words found.
                     </div>
-                    <button className={styles.hintButton}>Hint</button>
+                    <button className={styles.hintButton} onClick={handleHintClick}>Hint</button>
                 </div>
             </div>
 
@@ -189,4 +219,46 @@ export default function MangoStrands() {
             </div>
         </div>
     );
+}
+
+function findWordPath(word: string): { row: number; col: number }[] | null {
+  const upperWord = word.toUpperCase();
+  const rows = GRID.length;
+  const cols = GRID[0].length;
+
+  const visited: boolean[][] = Array.from({ length: rows }, () => Array(cols).fill(false));
+
+  const directions = [
+    { dr: -1, dc: -1 }, { dr: -1, dc: 0 }, { dr: -1, dc: 1 },
+    { dr: 0, dc: -1 },                  { dr: 0, dc: 1 },
+    { dr: 1, dc: -1 }, { dr: 1, dc: 0 }, { dr: 1, dc: 1 },
+  ];
+
+  function dfs(r: number, c: number, index: number, path: { row: number; col: number }[]): boolean {
+    if (index === upperWord.length) return true;
+    if (r < 0 || r >= rows || c < 0 || c >= cols) return false;
+    if (visited[r][c]) return false;
+    if (GRID[r][c] !== upperWord[index]) return false;
+
+    visited[r][c] = true;
+    path.push({ row: r, col: c });
+
+    for (const { dr, dc } of directions) {
+      if (dfs(r + dr, c + dc, index + 1, path)) return true;
+    }
+
+    visited[r][c] = false;
+    path.pop();
+    return false;
+  }
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const path: { row: number; col: number }[] = [];
+      visited.forEach(row => row.fill(false));
+      if (dfs(r, c, 0, path)) return path;
+    }
+  }
+
+  return null;
 }
