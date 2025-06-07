@@ -1,5 +1,6 @@
 export interface PuzzleData {
   id: number;
+  theme: string;
   grid: string[][];
   words: string[];
 }
@@ -7,20 +8,21 @@ export interface PuzzleData {
 export const PUZZLES: PuzzleData[] = [
   {
     id: 1,
+    theme: 'Wonderful Mangos',
     grid: [
-      ['A', 'T', 'I', 'S', 'S', 'E'],
-      ['N', 'X', 'O', 'W', 'T', 'E'],
-      ['I', 'N', 'T', 'E', 'E', 'D'],
-      ['D', 'A', 'M', 'A', 'S', 'U'],
-      ['T', 'L', 'U', 'G', 'N', 'O'],
-      ['R', 'O', 'F', 'O', 'I', 'C'],
-      ['P', 'I', 'D', 'E', 'L', 'D'],
-      ['C', 'S', 'L', 'I', 'C', 'E'],
+    ['A', 'T', 'I', 'T', 'R', 'O'],
+    ['N', 'X', 'O', 'C', 'I', 'P'],
+    ['I', 'N', 'T', 'S', 'W', 'E'],
+    ['D', 'A', 'M', 'A', 'T', 'E'],
+    ['S', 'L', 'U', 'G', 'N', 'D'],
+    ['E', 'D', 'F', 'O', 'C', 'E'],
+    ['E', 'M', 'O', 'I', 'E', 'I'],
+    ['S', 'O', 'T', 'H', 'S', 'L'],
     ],
     words: [
       'TROPIC',
       'SLICED',
-      'DELICOUS',
+      'SMOOTHIE',
       'ANTIOXIDANT',
       'SWEET',
       'SEED',
@@ -29,24 +31,24 @@ export const PUZZLES: PuzzleData[] = [
   },
   {
     id: 2,
+    theme: 'Delicious Mangos',
     grid: [
-      ['B', 'A', 'N', 'A', 'N', 'A'],
-      ['T', 'W', 'I', 'S', 'T', 'Y'],
-      ['P', 'E', 'E', 'L', 'S', 'R'],
-      ['C', 'R', 'E', 'A', 'M', 'S'],
-      ['H', 'O', 'T', 'P', 'O', 'T'],
-      ['D', 'E', 'S', 'S', 'E', 'R'],
-      ['S', 'N', 'A', 'C', 'K', 'S'],
-      ['Y', 'U', 'M', 'M', 'Y', 'Y'],
+    ['M', 'A', 'N', 'J', 'U', 'I'],
+    ['T', 'H', 'E', 'G', 'C', 'Y'],
+    ['O', 'I', 'O', 'N', 'E', 'C'],
+    ['O', 'M', 'S', 'L', 'A', 'T'],
+    ['N', 'G', 'I', 'R', 'N', 'E'],
+    ['I', 'E', 'R', 'C', 'E', 'P'],
+    ['H', 'F', 'I', 'D', 'R', 'I'],
+    ['S', 'E', 'R', 'O', 'U', 'S'],
     ],
     words: [
-      'BANANA',
-      'TWISTY',
-      'PEELS',
-      'CREAMS',
-      'DESSERT',
-      'SNACKS',
-      'YUMMY',
+      'JUICY',
+      'NECTAR',
+      'RIPENED',
+      'SMOOTHIE',
+      'REFRESHING',
+      'MANGOLICIOUS'
     ],
   },
 ];

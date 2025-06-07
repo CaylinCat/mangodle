@@ -2,27 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
+import { PUZZLES } from './data';
 
-const GRID = [
-    ['A', 'T', 'I', 'S', 'S', 'E'],
-    ['N', 'X', 'O', 'W', 'T', 'E'],
-    ['I', 'N', 'T', 'E', 'E', 'D'],
-    ['D', 'A', 'M', 'A', 'S', 'U'],
-    ['T', 'L', 'U', 'G', 'N', 'O'],
-    ['R', 'O', 'F', 'O', 'I', 'C'],
-    ['P', 'I', 'D', 'E', 'L', 'D'],
-    ['C', 'S', 'L', 'I', 'C', 'E'],
-];
 
-const WORDS = [
-    'TROPIC',
-    'SLICED',
-    'DELICOUS',
-    'ANTIOXIDANT',
-    'SWEET',
-    'SEED',
-    'MANGOFUL', // spangram
-];
+const selectedPuzzle = PUZZLES[Math.floor(Math.random() * PUZZLES.length)];
+
+const GRID = selectedPuzzle.grid;
+const WORDS = selectedPuzzle.words;
+const spangram = WORDS[WORDS.length - 1];
 
 export default function MangoStrands() {
     const [selected, setSelected] = useState<{ row: number; col: number }[]>([]);
@@ -99,7 +86,7 @@ export default function MangoStrands() {
         if (isHint) return styles.hinted;
 
         if (found) {
-            return found.word === 'MANGOFUL' ? styles.foundSpanagram : styles.found;
+            return found.word === spangram ? styles.foundSpanagram : styles.found;
         }
 
         if (inSelected) return styles.selected;
@@ -156,9 +143,10 @@ export default function MangoStrands() {
         <div className={styles.container} onMouseUp={handleMouseUp}>
 
             <div className={styles.leftPanel}>
+            <div className={styles.puzzleId}>Mands #{selectedPuzzle.id}</div>
                 <div className={styles.themeBox}>
                     <div className={styles.themeTitle}>Today's Theme</div>
-                    <div className={styles.theme}>Mangos</div>
+                    <div className={styles.theme}>{selectedPuzzle.theme}</div>
                     <div className={styles.progress}>
                         {foundPaths.length} of {WORDS.length} theme words found.
                     </div>
@@ -194,7 +182,7 @@ export default function MangoStrands() {
                         {/* Lines for found words (static) */}
                         {foundPaths.map(({ word, path }, i) => (
                         <g key={`found-${i}`}>
-                            {renderLines(path, false, word === 'MANGOFUL')} 
+                            {renderLines(path, false, word === spangram)} 
                         </g>
                         ))}
                     </svg>
@@ -222,41 +210,50 @@ export default function MangoStrands() {
 }
 
 function findWordPath(word: string): { row: number; col: number }[] | null {
-  const upperWord = word.toUpperCase();
   const rows = GRID.length;
   const cols = GRID[0].length;
-
-  const visited: boolean[][] = Array.from({ length: rows }, () => Array(cols).fill(false));
+  const upperWord = word.toUpperCase();
 
   const directions = [
     { dr: -1, dc: -1 }, { dr: -1, dc: 0 }, { dr: -1, dc: 1 },
-    { dr: 0, dc: -1 },                  { dr: 0, dc: 1 },
-    { dr: 1, dc: -1 }, { dr: 1, dc: 0 }, { dr: 1, dc: 1 },
+    { dr:  0, dc: -1 },                   { dr:  0, dc: 1 },
+    { dr:  1, dc: -1 }, { dr:  1, dc: 0 }, { dr:  1, dc: 1 },
   ];
 
-  function dfs(r: number, c: number, index: number, path: { row: number; col: number }[]): boolean {
-    if (index === upperWord.length) return true;
-    if (r < 0 || r >= rows || c < 0 || c >= cols) return false;
-    if (visited[r][c]) return false;
-    if (GRID[r][c] !== upperWord[index]) return false;
-
-    visited[r][c] = true;
-    path.push({ row: r, col: c });
-
-    for (const { dr, dc } of directions) {
-      if (dfs(r + dr, c + dc, index + 1, path)) return true;
+  function dfs(r: number, c: number, index: number, path: { row: number, col: number }[], visited: boolean[][]): boolean {
+    if (
+      r < 0 || r >= rows || c < 0 || c >= cols ||
+      visited[r][c] ||
+      GRID[r][c] !== upperWord[index]
+    ) {
+      return false;
     }
 
-    visited[r][c] = false;
+    path.push({ row: r, col: c });
+    visited[r][c] = true;
+
+    if (index === upperWord.length - 1) {
+      return true;
+    }
+
+    for (const { dr, dc } of directions) {
+      if (dfs(r + dr, c + dc, index + 1, path, visited)) {
+        return true;
+      }
+    }
+
     path.pop();
+    visited[r][c] = false;
     return false;
   }
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const path: { row: number; col: number }[] = [];
-      visited.forEach(row => row.fill(false));
-      if (dfs(r, c, 0, path)) return path;
+      const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
+      if (dfs(r, c, 0, path, visited)) {
+        return path;
+      }
     }
   }
 
