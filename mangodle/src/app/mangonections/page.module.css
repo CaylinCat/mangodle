@@ -121,3 +121,10 @@
 .shakeIncorrect {
   animation: shake 0.4s ease;
 }
+
+.mistakes {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 500;
+}

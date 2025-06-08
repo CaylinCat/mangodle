@@ -27,6 +27,9 @@ export default function ConnectionsGame() {
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [jumpIndex, setJumpIndex] = useState<number | null>(null);
   const [isShakingAll, setIsShakingAll] = useState(false);
+  const MAX_MISTAKES = 4;
+  const [mistakes, setMistakes] = useState(0);
+
 
   const toggleWord = (word: string) => {
     setSelected(prev =>
@@ -67,6 +70,7 @@ export default function ConnectionsGame() {
             setSelected([]);
             setJumpIndex(null);
           }, 600);
+          setMistakes(prev => prev + 1);
         } else if (feedback === 'correct') {
           const group = solutionGroups.find(
             g => g.words.every(w => selected.includes(w))
@@ -94,7 +98,7 @@ export default function ConnectionsGame() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Connections</h1>
+      <h1 className={styles.title}>Create four groups of four!</h1>
 
       <div className={styles.solvedArea}>
         {foundGroups.map((group, i) => (
@@ -132,6 +136,10 @@ export default function ConnectionsGame() {
             </button>
           );
         })}
+      </div>
+
+      <div className={styles.mistakes}>
+        Mistakes Remaining: {'⚫️'.repeat(MAX_MISTAKES - mistakes)}
       </div>
 
       <button
