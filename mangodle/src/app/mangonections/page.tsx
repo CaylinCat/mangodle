@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 
-// Fixed category colors (yellow, green, blue, purple)
 const CATEGORY_COLORS: Record<number, string> = {
   0: '#FFD700',
   1: '#90EE90',
@@ -11,7 +10,6 @@ const CATEGORY_COLORS: Record<number, string> = {
   3: '#D8BFD8',
 };
 
-// Example game data (no color inside)
 const solutionGroups = [
   { category: 'Fruits', words: ['Apple', 'Banana', 'Pear', 'Peach'] },
   { category: 'Pets', words: ['Dog', 'Cat', 'Rabbit', 'Hamster'] },
@@ -19,16 +17,15 @@ const solutionGroups = [
   { category: 'Genres', words: ['Jazz', 'Rock', 'Pop', 'HipHop'] },
 ];
 
-const allWords = solutionGroups.flatMap(g => g.words).sort(() => Math.random() - 0.5);
+const shuffledWords = solutionGroups
+  .flatMap(g => g.words)
+  .sort(() => Math.random() - 0.5);
 
 export default function ConnectionsGame() {
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<typeof solutionGroups>([]);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
-  
-  // Which word index is currently jumping
   const [jumpIndex, setJumpIndex] = useState<number | null>(null);
-  // Whether all selected are shaking
   const [isShakingAll, setIsShakingAll] = useState(false);
 
   const toggleWord = (word: string) => {
@@ -43,54 +40,81 @@ export default function ConnectionsGame() {
     );
 
     if (group && !foundGroups.includes(group)) {
-      setFoundGroups([...foundGroups, group]);
       setFeedback('correct');
-      setSelected([]);
     } else {
       setFeedback('incorrect');
-      setJumpIndex(0);  // start jumping from first selected
-      setIsShakingAll(false);
     }
+
+    setJumpIndex(0);
+    setIsShakingAll(false);
   };
 
-  // Sequence the jumps one by one, then shake all
   useEffect(() => {
     if (jumpIndex === null) return;
 
     if (jumpIndex < selected.length) {
       const timer = setTimeout(() => {
         setJumpIndex(jumpIndex + 1);
-      }, 350); // duration of jump animation + small buffer
+      }, 350);
       return () => clearTimeout(timer);
     } else {
-      // After last jump, start shaking all for 600ms, then clear
-      setIsShakingAll(true);
       const timer = setTimeout(() => {
-        setIsShakingAll(false);
-        setFeedback(null);
-        setSelected([]);
-        setJumpIndex(null);
-      }, 600);
+        if (feedback === 'incorrect') {
+          setIsShakingAll(true);
+          setTimeout(() => {
+            setIsShakingAll(false);
+            setFeedback(null);
+            setSelected([]);
+            setJumpIndex(null);
+          }, 600);
+        } else if (feedback === 'correct') {
+          const group = solutionGroups.find(
+            g => g.words.every(w => selected.includes(w))
+          );
+          if (group && !foundGroups.includes(group)) {
+            setFoundGroups(prev => [...prev, group]);
+          }
+          setFeedback(null);
+          setSelected([]);
+          setJumpIndex(null);
+        }
+      }, 400);
       return () => clearTimeout(timer);
     }
-  }, [jumpIndex, selected.length]);
+  }, [jumpIndex, selected.length, feedback]);
 
   const getWordColor = (word: string): string | null => {
     const index = foundGroups.findIndex(g => g.words.includes(word));
     return index !== -1 ? CATEGORY_COLORS[index] : null;
   };
 
+  const remainingWords = shuffledWords.filter(
+    word => !foundGroups.some(group => group.words.includes(word))
+  );
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Connections</h1>
-      <div className={styles.grid}>
-        {allWords.map((word, i) => {
-          const isSelected = selected.includes(word);
-          const color = getWordColor(word);
 
-          // For jumping: word is jumping if index matches jumpIndex - 1 (because jumpIndex increments after jump)
+      <div className={styles.solvedArea}>
+        {foundGroups.map((group, i) => (
+          <div
+            key={group.category}
+            className={styles.solvedGroup}
+            style={{ backgroundColor: CATEGORY_COLORS[i] }}
+          >
+            {group.category}
+            <div className={styles.solvedText}>
+              {group.words.join(', ')}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.grid}>
+        {remainingWords.map(word => {
+          const isSelected = selected.includes(word);
           const isJumping = jumpIndex !== null && selected[jumpIndex] === word;
-          // Shake all selected words together
           const isShaking = isShakingAll && isSelected;
 
           return (
@@ -101,17 +125,15 @@ export default function ConnectionsGame() {
                 ${isSelected ? styles.selected : ''}
                 ${isJumping ? styles.jump : ''}
                 ${isShaking ? styles.shakeIncorrect : ''}
-                ${feedback === 'correct' ? styles.correct : ''}
               `}
               onClick={() => toggleWord(word)}
-              style={{ backgroundColor: color || '' }}
-              disabled={!!color}
             >
               {word}
             </button>
           );
         })}
       </div>
+
       <button
         className={styles.submitButton}
         onClick={checkSelection}
