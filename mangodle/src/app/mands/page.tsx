@@ -235,6 +235,7 @@ export default function MangoStrands() {
             {showPopup && (
                 <div className={styles.popupOverlay}>
                     <div className={styles.popup}>
+                        <button onClick={() => setShowPopup(false)} className={styles.exit}>X</button>
                         <h2 className={styles.popupHeader}>Well Done!</h2>
                         <p className={styles.popupText}>Strands #{selectedPuzzle.id}</p>
                         <p className={styles.popupText}>“{selectedPuzzle.theme}”</p>
