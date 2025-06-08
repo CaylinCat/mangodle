@@ -249,3 +249,60 @@
   margin-bottom: 10px;
   color: #ff9800;
 }
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.popup {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  text-align: center;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.wordGrid {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 0.5rem auto;
+  max-width: 100px;
+}
+
+.emoji {
+  font-size: 24px;
+}
+
+.shareButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #ff9800;
+  color: black;
+  font-weight: normal;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.popupText {
+  font-size: 14px;
+}
+
+.popupHeader {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}

@@ -17,6 +17,9 @@ export default function MangoStrands() {
     const [currentSelection, setCurrentSelection] = useState('');
     const [lastResult, setLastResult] = useState<'valid' | 'invalid' | null>(null);
     const [hintedPath, setHintedPath] = useState<{ row: number; col: number }[] | null>(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [hintCount, setHintCount] = useState(0);
+
 
     const handleMouseDown = (row: number, col: number) => {
         setSelected([{ row, col }]);
@@ -71,7 +74,24 @@ export default function MangoStrands() {
 
         const path = findWordPath(notFoundWord);
         if (path) setHintedPath(path);
+        setHintCount(hintCount + 1);
     };
+
+    const handleShare = async () => {
+        const result = `Mands #${selectedPuzzle.id}\n` +
+            `"${selectedPuzzle.theme}"\n` +
+            foundPaths.map(({ word }) => (word === spangram ? '🥭' : '🟡')).join('') +
+            `\n${'💡'.repeat(hintCount)}`;
+
+        try {
+            await navigator.clipboard.writeText(result);
+            alert('Results copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy:', err);
+            alert('Failed to copy results. Try again.');
+        }
+    };
+
 
     const isInPath = (row: number, col: number, path: { row: number; col: number }[]) =>
         path.some(p => p.row === row && p.col === col);
@@ -139,6 +159,12 @@ export default function MangoStrands() {
         }
     }, [foundPaths, hintedPath]);
 
+    useEffect(() => {
+        if (foundPaths.length === WORDS.length) {
+            setShowPopup(true);
+        }
+    }, [foundPaths]);
+
     return (
         <div className={styles.container} onMouseUp={handleMouseUp}>
 
@@ -205,6 +231,34 @@ export default function MangoStrands() {
                     ))}
                 </div>
             </div>
+
+            {showPopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popup}>
+                        <h2 className={styles.popupHeader}>Well Done!</h2>
+                        <p className={styles.popupText}>Strands #{selectedPuzzle.id}</p>
+                        <p className={styles.popupText}>“{selectedPuzzle.theme}”</p>
+
+                        <div className={styles.wordGrid}>
+                            {foundPaths.map(({ word }) => (
+                            <span
+                                key={word}
+                                className={styles.emoji}
+                            >
+                                {word === spangram ? '🥭' : '🟡'}
+                            </span>
+                            ))}
+                        </div>
+                        <p className={styles.popupText}>
+                            Nice job finding the theme words 🟡<br />
+                            and Mangoram 🥭. You used {hintCount} hints 💡.
+                        </p>
+                        <button className={styles.shareButton} onClick={handleShare}>
+                            Share your results
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
