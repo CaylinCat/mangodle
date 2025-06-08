@@ -1,0 +1,88 @@
+.container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.wordButton {
+  padding: 0.8rem 1rem;
+  border: 2px solid #888;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, border-color 0.3s;
+  user-select: none;
+  outline: none;
+}
+
+.wordButton:hover:not(:disabled) {
+  border-color: #444;
+}
+
+.selected {
+  border-color: #007bff;
+  background-color: #cce5ff;
+}
+
+.correct {
+  border-color: #28a745;
+  background-color: #d4edda;
+  cursor: default;
+}
+
+.submitButton {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.submitButton:disabled {
+  background-color: #7baedc;
+  cursor: not-allowed;
+}
+
+.submitButton:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
+/* Jump animation */
+@keyframes jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+.jump {
+  animation: jump 0.2s ease;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.shakeIncorrect {
+  animation: shake 0.4s ease;
+}

@@ -18,6 +18,9 @@ export default function Home() {
         <li>
           <Link href="/mands">Play Mands</Link>
         </li>
+        <li>
+          <Link href="/mangonections">Play Mangonections</Link>
+        </li>
       </ul>
     </main>
   );
