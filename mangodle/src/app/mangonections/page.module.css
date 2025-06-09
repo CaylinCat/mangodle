@@ -82,19 +82,21 @@
 }
 
 .submitButton {
-  padding: 0.8rem 2rem;
+  padding: 0.8rem 1rem;
   font-size: 1rem;
   border-radius: 8px;
-  background-color: #007bff;
-  border: none;
+  background-color: black;
   color: white;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 9999px;
   transition: background-color 0.3s;
 }
 
 .submitButton:disabled {
-  background-color: #7baedc;
+  border: 1px solid #adb5bd;
+  color: #adb5bd;
+  background-color: white;
   cursor: not-allowed;
 }
 
@@ -148,4 +150,51 @@
   border-color: #adb5bd;
   color: #adb5bd;
   cursor: not-allowed;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popupContent {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  font-size: 20px;
+  text-align: center;
+  max-width: 300px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.popupHeader {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.emojiBox {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+  white-space: pre-line;
+  line-height: 1.1;
+  letter-spacing: -4px;
+}
+
+.exit {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
 }

@@ -2,24 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import styles from './page.module.css';
+import { PUZZLES } from './data';
 
 const CATEGORY_COLORS: Record<number, string> = {
-  0: '#FFD700',
-  1: '#90EE90',
-  2: '#ADD8E6',
-  3: '#D8BFD8',
+  0: '#FFD700',  // Yellow
+  1: '#90EE90',  // Green
+  2: '#ADD8E6',  // Blue
+  3: '#D8BFD8',  // Purple
 };
 
-const solutionGroups = [
-  { category: 'Fruits', words: ['Apple', 'Banana', 'Pear', 'Peach'] },
-  { category: 'Pets', words: ['Dog', 'Cat', 'Rabbit', 'Hamster'] },
-  { category: 'Vehicles', words: ['Car', 'Bus', 'Bike', 'Train'] },
-  { category: 'Genres', words: ['Jazz', 'Rock', 'Pop', 'HipHop'] },
-];
+const COLOR_EMOJIS: Record<number, string> = {
+  0: '🟨',
+  1: '🟩',
+  2: '🟦',
+  3: '🟪',
+};
 
-const shuffledWords = solutionGroups
-  .flatMap(g => g.words)
-  .sort(() => Math.random() - 0.5);
+const selectedPuzzle = PUZZLES[Math.floor(Math.random() * PUZZLES.length)];
+const ID = selectedPuzzle.id;
+const solutionGroups = selectedPuzzle.groups;
 
 export default function ConnectionsGame() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -29,7 +30,18 @@ export default function ConnectionsGame() {
   const [isShakingAll, setIsShakingAll] = useState(false);
   const MAX_MISTAKES = 4;
   const [mistakes, setMistakes] = useState(0);
+  const [guessHistory, setGuessHistory] = useState<string[][]>([]);
+  const [showPopup, setShowPopup] = useState(false);
 
+  const shuffledWords = solutionGroups
+    .flatMap(g => g.words)
+    .sort(() => Math.random() - 0.5);
+
+  const [shuffled, setShuffled] = useState(() => shuffledWords);
+
+  const remainingWords = shuffled.filter(
+    word => !foundGroups.some(group => group.words.includes(word))
+  );
 
   const toggleWord = (word: string) => {
     setSelected(prev => {
@@ -43,9 +55,13 @@ export default function ConnectionsGame() {
   };
 
   const checkSelection = () => {
+    if (selected.length !== 4) return;
+
     const group = solutionGroups.find(
-      g => g.words.every(w => selected.includes(w)) && selected.length === 4
+      g => g.words.every(w => selected.includes(w))
     );
+
+    setGuessHistory(prev => [...prev, selected]);
 
     if (group && !foundGroups.includes(group)) {
       setFeedback('correct');
@@ -75,13 +91,25 @@ export default function ConnectionsGame() {
             setSelected([]);
             setJumpIndex(null);
           }, 600);
-          setMistakes(prev => prev + 1);
+          setMistakes(prev => {
+            const newCount = prev + 1;
+            if (newCount >= MAX_MISTAKES) {
+              setShowPopup(true);
+            }
+            return newCount;
+          });
         } else if (feedback === 'correct') {
           const group = solutionGroups.find(
             g => g.words.every(w => selected.includes(w))
           );
           if (group && !foundGroups.includes(group)) {
-            setFoundGroups(prev => [...prev, group]);
+            setFoundGroups(prev => {
+              const newGroups = [...prev, group];
+              if (newGroups.length === 4) {
+                setShowPopup(true);
+              }
+              return newGroups;
+            });
           }
           setFeedback(null);
           setSelected([]);
@@ -97,14 +125,6 @@ export default function ConnectionsGame() {
     return index !== -1 ? CATEGORY_COLORS[index] : null;
   };
 
-  const [shuffled, setShuffled] = useState(() =>
-    solutionGroups.flatMap(g => g.words).sort(() => Math.random() - 0.5)
-  );
-
-  const remainingWords = shuffled.filter(
-    word => !foundGroups.some(group => group.words.includes(word))
-  );
-
   const shuffleWords = () => {
     const remaining = shuffledWords.filter(
       word => !foundGroups.some(group => group.words.includes(word))
@@ -113,23 +133,35 @@ export default function ConnectionsGame() {
     setShuffled(newOrder);
   };
 
+  const renderEmojiGrid = () => {
+    return guessHistory.map(guess => {
+      return guess.map(word => {
+        const groupIndex = solutionGroups.findIndex(g => g.words.includes(word));
+        return groupIndex !== -1 ? COLOR_EMOJIS[groupIndex] : '⬜';
+      }).join('');
+    });
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Create four groups of four!</h1>
 
       <div className={styles.solvedArea}>
-        {foundGroups.map((group, i) => (
-          <div
-            key={group.category}
-            className={styles.solvedGroup}
-            style={{ backgroundColor: CATEGORY_COLORS[i] }}
-          >
-            {group.category}
-            <div className={styles.solvedText}>
-              {group.words.join(', ')}
+        {foundGroups.map(group => {
+          const index = solutionGroups.findIndex(g => g.category === group.category);
+          return (
+            <div
+              key={group.category}
+              className={styles.solvedGroup}
+              style={{ backgroundColor: CATEGORY_COLORS[index] }}
+            >
+              {group.category}
+              <div className={styles.solvedText}>
+                {group.words.join(', ')}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className={styles.grid}>
@@ -166,10 +198,33 @@ export default function ConnectionsGame() {
         <button className={styles.utilityButton} onClick={() => setSelected([])} disabled={selected.length === 0}>
           Deselect
         </button>
-        <button className={styles.utilityButton} onClick={checkSelection} disabled={selected.length !== 4}>
+        <button className={styles.submitButton} onClick={checkSelection} disabled={selected.length !== 4}>
           Submit
         </button>
       </div>
+
+      {showPopup && (
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <button onClick={() => setShowPopup(false)} className={styles.exit}>X</button>
+            <h2 className={styles.popupHeader}>{foundGroups.length === 4 ? 'Great!' : 'Next Time!'}</h2>
+            <h3>Mangonections #{ID}</h3>
+            <pre className={styles.emojiBox}>
+              {renderEmojiGrid().join('\n')}
+            </pre>
+            <button
+              onClick={() => {
+                const text = `Mangonections #${ID}\n\n${renderEmojiGrid().join('\n')}`;
+                navigator.clipboard.writeText(text);
+                alert('Copied to clipboard!');
+              }}
+              className={styles.utilityButton}
+            >
+              Share
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
