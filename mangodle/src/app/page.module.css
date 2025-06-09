@@ -1,25 +1,55 @@
-/* app/page.module.css */
-
 .home {
-  padding: 2rem;
-  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fafafa;
+  font-family: "Arial", sans-serif;
+  color: #111;
 }
 
-.home ul {
-  list-style: none;
-  padding: 0;
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
 }
 
-.home li {
-  margin: 1rem 0;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 900px;
 }
 
-.home a {
+.card {
+  background: white;
+  padding: 1.8rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.1);
   text-decoration: none;
-  color: #0070f3;
-  font-size: 1.5rem;
+  color: inherit;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
-.home a:hover {
-  text-decoration: underline;
+.card:hover,
+.card:focus,
+.card:active {
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
+  transform: translateY(-3px);
+}
+
+.card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
 }
