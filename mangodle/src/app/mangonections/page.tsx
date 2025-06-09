@@ -32,9 +32,14 @@ export default function ConnectionsGame() {
 
 
   const toggleWord = (word: string) => {
-    setSelected(prev =>
-      prev.includes(word) ? prev.filter(w => w !== word) : [...prev, word]
-    );
+    setSelected(prev => {
+      if (prev.includes(word)) {
+        return prev.filter(w => w !== word);
+      } else if (prev.length < 4) {
+        return [...prev, word];
+      }
+      return prev;
+    });
   };
 
   const checkSelection = () => {
@@ -92,9 +97,21 @@ export default function ConnectionsGame() {
     return index !== -1 ? CATEGORY_COLORS[index] : null;
   };
 
-  const remainingWords = shuffledWords.filter(
+  const [shuffled, setShuffled] = useState(() =>
+    solutionGroups.flatMap(g => g.words).sort(() => Math.random() - 0.5)
+  );
+
+  const remainingWords = shuffled.filter(
     word => !foundGroups.some(group => group.words.includes(word))
   );
+
+  const shuffleWords = () => {
+    const remaining = shuffledWords.filter(
+      word => !foundGroups.some(group => group.words.includes(word))
+    );
+    const newOrder = [...remaining].sort(() => Math.random() - 0.5);
+    setShuffled(newOrder);
+  };
 
   return (
     <div className={styles.container}>
@@ -142,13 +159,17 @@ export default function ConnectionsGame() {
         Mistakes Remaining: {'⚫️'.repeat(MAX_MISTAKES - mistakes)}
       </div>
 
-      <button
-        className={styles.submitButton}
-        onClick={checkSelection}
-        disabled={selected.length !== 4}
-      >
-        Submit
-      </button>
+      <div className={styles.buttonRow}>
+        <button className={styles.utilityButton} onClick={shuffleWords}>
+          Shuffle
+        </button>
+        <button className={styles.utilityButton} onClick={() => setSelected([])} disabled={selected.length === 0}>
+          Deselect
+        </button>
+        <button className={styles.utilityButton} onClick={checkSelection} disabled={selected.length !== 4}>
+          Submit
+        </button>
+      </div>
     </div>
   );
 }

@@ -98,10 +98,6 @@
   cursor: not-allowed;
 }
 
-.submitButton:not(:disabled):hover {
-  background-color: #0056b3;
-}
-
 @keyframes jump {
   0% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
@@ -127,4 +123,29 @@
   margin-bottom: 1rem;
   color: #333;
   font-weight: 500;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.utilityButton {
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 9999px;
+  transition: background-color 0.3s;
+}
+
+.utilityButton:disabled {
+  border-color: #adb5bd;
+  color: #adb5bd;
+  cursor: not-allowed;
 }
