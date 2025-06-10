@@ -12,19 +12,28 @@ export const PUZZLES: Puzzle[] = [
   {
     id: 1,
     groups: [
-      { category: 'Fruits', words: ['Apple', 'Banana', 'Pear', 'Peach'] },
-      { category: 'Pets', words: ['Dog', 'Cat', 'Rabbit', 'Hamster'] },
-      { category: 'Vehicles', words: ['Car', 'Bus', 'Bike', 'Train'] },
-      { category: 'Genres', words: ['Jazz', 'Rock', 'Pop', 'HipHop'] },
+      { category: 'Condiments', words: ['Mayo', 'Ketchup', 'Mustard', 'Relish'] },
+      { category: 'Fruits', words: ['Mango', 'Guava', 'Papaya', 'Lychee'] },
+      { category: 'Seafood', words: ['Shrimp', 'Tuna', 'Crab', 'Lobster'] },
+      { category: 'Colors', words: ['Olive', 'Peach', 'Coral', 'Salmon'] },
     ],
   },
   {
     id: 2,
     groups: [
-      { category: 'Colors', words: ['Red', 'Blue', 'Green', 'Yellow'] },
-      { category: 'Animals', words: ['Lion', 'Tiger', 'Bear', 'Wolf'] },
-      { category: 'Cities', words: ['Paris', 'Tokyo', 'Rome', 'London'] },
-      { category: 'Sports', words: ['Soccer', 'Tennis', 'Baseball', 'Golf'] },
+      { category: 'Mango Textures', words: ['Fibrous', 'Juicy', 'Soft', 'Firm'] },
+      { category: 'Ugh not him again', words: ['Hard', 'Firm', 'Cold', 'Bitter'] },
+      { category: 'Flavors', words: ['Sweet', 'Sour', 'Salty', 'Umami'] },
+      { category: 'Too hot!', words: ['Burning', 'Hot', 'Roasting', 'Melting'] },
+    ],
+  },
+  {
+    id: 3,
+    groups: [
+      { category: 'Worldwide Friends', words: ['Friend', 'Amigo', 'Rafiki', '友達'] },
+      { category: 'Types of Cheetos', words: ['Puffs', 'Crunchy', 'Bites', 'Fantastix'] },
+      { category: 'People but singular', words: ['Human', 'Person', 'Figure', 'Individual'] },
+      { category: '___go', words: ['Man', 'Flamin', 'Ami', 'Indi'] },
     ],
   },
 ];
