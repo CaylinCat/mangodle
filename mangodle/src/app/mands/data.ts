@@ -51,4 +51,27 @@ export const PUZZLES: PuzzleData[] = [
       'MANGOLICIOUS'
     ],
   },
+  {
+    id: 3,
+    theme: 'Mango Foods',
+    grid: [
+      ['S', 'T', 'L', 'C', 'H', 'I'],
+      ['I', 'C', 'A', 'S', 'O', 'M'],
+      ['Y', 'K', 'Y', 'M', 'S', 'I'],
+      ['R', 'M', 'S', 'U', 'A', 'D'],
+      ['I', 'M', 'G', 'I', 'N', 'E'],
+      ['C', 'U', 'N', 'B', 'G', 'I'],
+      ['E', 'P', 'Y', 'O', 'D', 'R'],
+      ['U', 'D', 'D', 'I', 'N', 'G'],
+    ],
+    words: [
+      'STICKYRICE',
+      'PUDDING',
+      'DRIED',
+      'BINGSU',
+      'LASSI',
+      'MOCHI',
+      'YUMMYMANGO'
+    ],
+  },
 ];
