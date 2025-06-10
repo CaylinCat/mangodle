@@ -28,7 +28,7 @@ export const CROSSWORD_PUZZLES: Crossword[] = [
       { number: 9, row: 0, col: 4, answer: 'ENDOW', clue: 'To provide with a talent or gift' },
     ],
   },
-    {
+  {
     across: [
       { number: 1, row: 1, col: 0, answer: 'SALAD', clue: 'Leafy dish often served cold' },
       { number: 2, row: 2, col: 0, answer: 'ENEMY', clue: 'Opponent or adversary' },
@@ -44,4 +44,20 @@ export const CROSSWORD_PUZZLES: Crossword[] = [
       { number: 9, row: 1, col: 4, answer: 'DYE', clue: 'Substance used to color fabric' },
     ],
   },
+  {
+    across: [
+      { number: 1, row: 0, col: 2, answer: 'MAP', clue: 'Navigation aid' },
+      { number: 2, row: 1, col: 0, answer: 'SHADE', clue: 'Relief from sunlight' },
+      { number: 3, row: 2, col: 0, answer: 'PANDA', clue: 'Bamboo eating bear' },
+      { number: 4, row: 3, col: 0, answer: 'ANGER', clue: '>:( feeling' },
+      { number: 5, row: 4, col: 1, answer: 'GOD', clue: 'Oh my ___!' },
+    ],
+    down: [
+      { number: 2, row: 1, col: 0, answer: 'SPA', clue: 'Place to relax and unwind' },
+      { number: 6, row: 1, col: 1, answer: 'HANG', clue: 'Suspend from above' },
+      { number: 1, row: 0, col: 2, answer: 'MANGO', clue: 'Yummy tropical orange' },
+      { number: 8, row: 0, col: 3, answer: 'ADDED', clue: '+' },
+      { number: 9, row: 0, col: 4, answer: 'PEAR', clue: 'Green fruit, shaped like a teardrop' },
+    ]
+  }
 ];
