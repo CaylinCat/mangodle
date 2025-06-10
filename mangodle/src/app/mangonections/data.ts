@@ -22,7 +22,7 @@ export const PUZZLES: Puzzle[] = [
     id: 2,
     groups: [
       { category: 'Mango Textures', words: ['Fibrous', 'Juicy', 'Soft', 'Firm'] },
-      { category: 'Ugh not him again', words: ['Hard', 'Firm', 'Cold', 'Bitter'] },
+      { category: 'Ugh not him again', words: ['Hard', 'Stern', 'Cold', 'Bitter'] },
       { category: 'Flavors', words: ['Sweet', 'Sour', 'Salty', 'Umami'] },
       { category: 'Too hot!', words: ['Burning', 'Hot', 'Roasting', 'Melting'] },
     ],
