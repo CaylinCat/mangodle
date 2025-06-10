@@ -15,11 +15,11 @@ export default function SpellingBee() {
   const RANKS = [
     { name: 'Beginner', threshold: 0 },
     { name: 'Good Start', threshold: 5 },
-    { name: 'Moving Up', threshold: 10 },
-    { name: 'Solid', threshold: 20 },
-    { name: 'Great', threshold: 30 },
-    { name: 'Amazing', threshold: 40 },
-    { name: 'Genius', threshold: 50 },
+    { name: 'Moving Up', threshold: 15 },
+    { name: 'Solid', threshold: 30 },
+    { name: 'Great', threshold: 50 },
+    { name: 'Amazing', threshold: 75 },
+    { name: 'Genius', threshold: 110 },
   ];
 
   const calculateScore = () => {
