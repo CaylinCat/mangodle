@@ -1,32 +1,63 @@
 import Link from 'next/link';
 import styles from './page.module.css';
 
+const GAMES = [
+  {
+    href: '/mangodle',
+    title: 'Mangodle',
+    description: 'Guess the mango word!',
+    emoji: '🥭',
+    bgColor: '#f0c651',
+  },
+  {
+    href: '/mangobee',
+    title: 'Mango Bee',
+    description: 'Find words with mango letters!',
+    emoji: '🐝',
+    bgColor: '#f0db51',
+  },
+  {
+    href: '/minimango',
+    title: 'Mini Mango',
+    description: 'A mini mango crossword to solve!',
+    emoji: '🔲',
+    bgColor: '#f0c651',
+  },
+  {
+    href: '/mands',
+    title: 'Mands',
+    description: 'The strands of a mango!',
+    emoji: '🧠',
+    bgColor: '#f0db51',
+  },
+  {
+    href: '/mangonections',
+    title: 'Mangonections',
+    description: 'Connect em mangos!',
+    emoji: '🧩',
+    bgColor: '#f0c651',
+  },
+];
+
 export default function Home() {
   return (
     <main className={styles.home}>
       <h1 className={styles.title}>Mango Times Games</h1>
       <div className={styles.grid}>
-        <Link href="/mangodle" className={styles.card}>
-          <h2>Mangodle &rarr;</h2>
-          <p>Guess the mango word!</p>
-        </Link>
-        <Link href="/mangobee" className={styles.card}>
-          <h2>Mango Bee &rarr;</h2>
-          <p>Find words with mango letters!</p>
-        </Link>
-        <Link href="/minimango" className={styles.card}>
-          <h2>Mini Mango &rarr;</h2>
-          <p>A mini word puzzle to solve.</p>
-        </Link>
-        <Link href="/mands" className={styles.card}>
-          <h2>Mands &rarr;</h2>
-          <p>Another fun mango word game.</p>
-        </Link>
-        <Link href="/mangonections" className={styles.card}>
-          <h2>Mangonections &rarr;</h2>
-          <p>Group words by connections.</p>
-        </Link>
+        {GAMES.map(({ href, title, description, emoji, bgColor }) => (
+          <Link href={href} key={href} className={styles.card}>
+            <div className={styles.cardTop} style={{ backgroundColor: bgColor }}>
+              <div className={styles.emoji}>{emoji}</div>
+            </div>
+            <div className={styles.cardContent}>
+              <h2>{title}</h2>
+              <p>{description}</p>
+            </div>
+            <div className={styles.cardFooter}>Play</div>
+          </Link>
+        ))}
       </div>
+      <div className={styles.version}>v1.0</div>
     </main>
   );
 }
