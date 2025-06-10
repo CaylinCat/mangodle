@@ -32,6 +32,8 @@ export default function ConnectionsGame() {
   const [mistakes, setMistakes] = useState(0);
   const [guessHistory, setGuessHistory] = useState<string[][]>([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [oneOffError, setOneOffError] = useState(false);
+
 
   const shuffledWords = solutionGroups
     .flatMap(g => g.words)
@@ -84,12 +86,20 @@ export default function ConnectionsGame() {
     } else {
       const timer = setTimeout(() => {
         if (feedback === 'incorrect') {
+          const isOneOff = solutionGroups.some(g => {
+            const inGroup = g.words.filter(w => selected.includes(w));
+            return inGroup.length === 3;
+          });
           setIsShakingAll(true);
           setTimeout(() => {
             setIsShakingAll(false);
             setFeedback(null);
-            setSelected([]);
+            // setSelected([]);
             setJumpIndex(null);
+            if (isOneOff) {
+              setOneOffError(true);
+              setTimeout(() => setOneOffError(false), 2000);
+            }
           }, 600);
           setMistakes(prev => {
             const newCount = prev + 1;
@@ -186,6 +196,10 @@ export default function ConnectionsGame() {
           );
         })}
       </div>
+
+      {oneOffError && (
+        <div className={styles.errorMessage}>1 off!</div>
+      )}
 
       <div className={styles.mistakes}>
         Mistakes Remaining: {'⚫️'.repeat(MAX_MISTAKES - mistakes)}
