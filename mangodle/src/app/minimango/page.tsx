@@ -434,7 +434,7 @@ export default function Page() {
             <button
               className={styles.shareButton}
               onClick={() => {
-                const shareText = `MiniMango 🥭\nSolved in ${formatTime(elapsed)}!`;
+                const shareText = `MiniMango #${puzzle.id}🥭\nSolved in ${formatTime(elapsed)}!`;
                 navigator.clipboard.writeText(shareText);
                 alert('Result copied to clipboard!');
               }}
