@@ -42,16 +42,16 @@ export default function SpellingBee() {
     return score;
   };
 
-  const getRank = (score: number) => {
-    for (let i = RANKS.length - 1; i >= 0; i--) {
-      if (score >= RANKS[i].threshold) return RANKS[i].name;
-    }
-    return 'Beginner';
-  };
+  // const getRank = (score: number) => {
+  //   for (let i = RANKS.length - 1; i >= 0; i--) {
+  //     if (score >= RANKS[i].threshold) return RANKS[i].name;
+  //   }
+  //   return 'Beginner';
+  // };
 
   const score = calculateScore();
   // const rank = getRank(score);
-  const maxThreshold = RANKS[RANKS.length - 1].threshold;
+  // const maxThreshold = RANKS[RANKS.length - 1].threshold;
   // const progress = Math.min((score / maxThreshold) * 100, 100);
 
   const currentRankIndex = RANKS
