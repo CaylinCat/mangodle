@@ -46,7 +46,7 @@ export default function Home() {
       <div className={styles.grid}>
         {GAMES.map(({ href, title, description, emoji, bgColor }) => (
           <Link href={href} key={href}>
-            <a className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardTop} style={{ backgroundColor: bgColor }}>
                 <div className={styles.emoji}>{emoji}</div>
               </div>
@@ -55,7 +55,7 @@ export default function Home() {
                 <p>{description}</p>
               </div>
               <div className={styles.cardFooter}>Play</div>
-            </a>
+            </div>
           </Link>
         ))}
       </div>
