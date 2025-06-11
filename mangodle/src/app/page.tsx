@@ -45,15 +45,17 @@ export default function Home() {
       <h1 className={styles.title}>Mango Times Games</h1>
       <div className={styles.grid}>
         {GAMES.map(({ href, title, description, emoji, bgColor }) => (
-          <Link href={href} key={href} className={styles.card}>
-            <div className={styles.cardTop} style={{ backgroundColor: bgColor }}>
-              <div className={styles.emoji}>{emoji}</div>
-            </div>
-            <div className={styles.cardContent}>
-              <h2>{title}</h2>
-              <p>{description}</p>
-            </div>
-            <div className={styles.cardFooter}>Play</div>
+          <Link href={href} key={href}>
+            <a className={styles.card}>
+              <div className={styles.cardTop} style={{ backgroundColor: bgColor }}>
+                <div className={styles.emoji}>{emoji}</div>
+              </div>
+              <div className={styles.cardContent}>
+                <h2>{title}</h2>
+                <p>{description}</p>
+              </div>
+              <div className={styles.cardFooter}>Play</div>
+            </a>
           </Link>
         ))}
       </div>
