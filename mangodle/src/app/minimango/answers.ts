@@ -7,12 +7,14 @@ export type Clue = {
 };
 
 export type Crossword = {
+  id: number;
   across: Clue[];
   down: Clue[];
 };
 
 export const CROSSWORD_PUZZLES: Crossword[] = [
   {
+    id: 1,
     across: [
       { number: 1, row: 0, col: 0, answer: 'SHAME', clue: 'A painful feeling of guilt or disgrace' },
       { number: 2, row: 1, col: 0, answer: 'PECAN', clue: 'Nut often used in pies' },
@@ -29,6 +31,7 @@ export const CROSSWORD_PUZZLES: Crossword[] = [
     ],
   },
   {
+    id: 2,
     across: [
       { number: 1, row: 1, col: 0, answer: 'SALAD', clue: 'Leafy dish often served cold' },
       { number: 2, row: 2, col: 0, answer: 'ENEMY', clue: 'Opponent or adversary' },
@@ -45,6 +48,7 @@ export const CROSSWORD_PUZZLES: Crossword[] = [
     ],
   },
   {
+    id: 3,
     across: [
       { number: 1, row: 0, col: 2, answer: 'MAP', clue: 'Navigation aid' },
       { number: 2, row: 1, col: 0, answer: 'SHADE', clue: 'Relief from sunlight' },

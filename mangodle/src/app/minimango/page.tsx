@@ -282,7 +282,7 @@ export default function Page() {
     <div className={styles.wrapper}>
       <div className={styles.timerContainer}>
           <div className={styles.titleLine}>
-            <span className={styles.title}>🥭The Mini Mango </span>{' '}
+            <span className={styles.title}>🥭The Mini Mango #{puzzle.id}</span>{' '}
             <span className={styles.date}>{dateString}</span>
           </div>
         <hr className={styles.divider} />
@@ -427,7 +427,7 @@ export default function Page() {
           <div className={styles.popup} onClick={e => e.stopPropagation()}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🥭</div>
             <h2>Congratulations!</h2>
-            <p>You solved MiniMango in {formatTime(elapsed)}.</p>
+            <p>You solved MiniMango #{puzzle.id} in {formatTime(elapsed)}.</p>
             <button
               className={styles.shareButton}
               onClick={() => {
