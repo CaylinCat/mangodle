@@ -11,6 +11,8 @@ export default function SpellingBee() {
   const [current, setCurrent] = useState('');
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [message, setMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+
 
   const RANKS = [
     { name: 'Beginner', threshold: 0 },
@@ -75,6 +77,12 @@ export default function SpellingBee() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [letters, current, foundWords]);
+
+  useEffect(() => {
+    if (score >= RANKS[RANKS.length - 1].threshold && !showPopup) {
+      setShowPopup(true);
+    }
+  }, [score]);
 
   const handleLetterClick = (letter: string) => {
     setCurrent(current + letter);
@@ -206,6 +214,18 @@ export default function SpellingBee() {
           </ul>
         </div>
       </div>
+
+      {showPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popup}>
+            <button onClick={() => setShowPopup(false)} className={styles.exit}>X</button>
+            <h2 className={styles.popupHeader}>Genius!</h2>
+            <p>{new Date().toLocaleDateString()}</p>
+            <img src="/mangobee.png" alt="Genius Mango" className={styles.popupImage} />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

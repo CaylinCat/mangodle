@@ -22,6 +22,7 @@ export const VALID_WORDS = [
   'snag',
   'gast',
   'nags',
+  'mans',
   'tans',
   'saga',
   'sagas',
