@@ -1,14 +1,7 @@
-import { NextConfig } from 'next'
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  // DO NOT add `output: 'export'`
+};
 
-const isProd = process.env.NODE_ENV === 'production'
-
-// Replace 'REPO-NAME' with your GitHub repo name
-const basePath = isProd ? '/mangodle' : ''
-
-const nextConfig: NextConfig = {
-  output: 'export',   // static HTML export
-  basePath,
-  assetPrefix: basePath,
-}
-
-export default nextConfig
+module.exports = nextConfig;
