@@ -130,10 +130,10 @@ export default function ConnectionsGame() {
     }
   }, [jumpIndex, selected.length, feedback]);
 
-  const getWordColor = (word: string): string | null => {
-    const index = foundGroups.findIndex(g => g.words.includes(word));
-    return index !== -1 ? CATEGORY_COLORS[index] : null;
-  };
+  // const getWordColor = (word: string): string | null => {
+  //   const index = foundGroups.findIndex(g => g.words.includes(word));
+  //   return index !== -1 ? CATEGORY_COLORS[index] : null;
+  // };
 
   const shuffleWords = () => {
     const remaining = shuffledWords.filter(

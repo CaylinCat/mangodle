@@ -20,6 +20,7 @@ function buildGrid(clues: typeof puzzle) {
     Array.from({ length: WIDTH }, () => ({ letter: '', isActive: false }))
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const markClue = (clue: any, isAcross: boolean) => {
     for (let i = 0; i < clue.answer.length; i++) {
       const row = clue.row + (isAcross ? 0 : i);
@@ -49,6 +50,7 @@ function findClueAtCell(clues: typeof puzzle, row: number, col: number, dir: Dir
   return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getClueCells(clue: any, dir: Direction) {
   const cells = [];
   for (let i = 0; i < clue.answer.length; i++) {
@@ -197,6 +199,7 @@ export default function Page() {
     return clue?.number === clueNumber;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function markCorrect(row: any, col: any) {
     setCorrectCells(prev => new Set(prev).add(`${row},${col}`));
   }

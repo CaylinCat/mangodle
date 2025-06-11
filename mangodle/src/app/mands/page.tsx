@@ -121,7 +121,7 @@ export default function MangoStrands() {
     const svgWidth = GRID[0].length * cellSize + (GRID[0].length - 1) * gapX;
     const svgHeight = GRID.length * cellSize + (GRID.length - 1) * gapY;
 
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const renderLines = (path: any[], animate: boolean, isSpanagram = false) => {
         if (path.length < 2) return null;
 
@@ -171,7 +171,7 @@ export default function MangoStrands() {
             <div className={styles.leftPanel}>
             <div className={styles.puzzleId}>Mands #{selectedPuzzle.id}</div>
                 <div className={styles.themeBox}>
-                    <div className={styles.themeTitle}>Today's Theme</div>
+                    <div className={styles.themeTitle}>Today&apos;s Theme</div>
                     <div className={styles.theme}>{selectedPuzzle.theme}</div>
                     <div className={styles.progress}>
                         {foundPaths.length} of {WORDS.length} theme words found.

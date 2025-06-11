@@ -26,7 +26,7 @@ export default function SpellingBee() {
 
   const calculateScore = () => {
     let score = 0;
-    for (let word of foundWords) {
+    for (const word of foundWords) {
       if (word.length === 4) {
         score += 1;
       } else {
@@ -50,9 +50,9 @@ export default function SpellingBee() {
   };
 
   const score = calculateScore();
-  const rank = getRank(score);
+  // const rank = getRank(score);
   const maxThreshold = RANKS[RANKS.length - 1].threshold;
-  const progress = Math.min((score / maxThreshold) * 100, 100);
+  // const progress = Math.min((score / maxThreshold) * 100, 100);
 
   const currentRankIndex = RANKS
     .map((r) => r.threshold)
