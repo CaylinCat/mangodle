@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
 
@@ -40,6 +43,8 @@ const GAMES = [
 ];
 
 export default function Home() {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <main className={styles.home}>
       <h1 className={styles.title}>Mango Times Games</h1>
@@ -59,7 +64,23 @@ export default function Home() {
           </Link>
         ))}
       </div>
-      <div className={styles.version}>v1.0</div>
+
+      <div
+        className={`${styles.version} ${expanded ? styles.expanded : ''}`}
+        onClick={() => setExpanded(!expanded)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') setExpanded(!expanded);
+        }}
+      >
+        <div>v1.0</div>
+        {expanded && (
+          <div>
+            Mangobee, Mangodle, Mangonections, Minimango, and Mands with 3 games each. Created by Caylin.
+          </div>
+        )}
+      </div>
     </main>
   );
 }

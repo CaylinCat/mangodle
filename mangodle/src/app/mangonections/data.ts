@@ -15,7 +15,7 @@ export const PUZZLES: Puzzle[] = [
       { category: 'Condiments', words: ['Mayo', 'Ketchup', 'Mustard', 'Relish'] },
       { category: 'Fruits', words: ['Mango', 'Guava', 'Papaya', 'Lychee'] },
       { category: 'Seafood', words: ['Shrimp', 'Tuna', 'Crab', 'Lobster'] },
-      { category: 'Colors', words: ['Olive', 'Peach', 'Coral', 'Salmon'] },
+      { category: 'Shades of Orange Mixtures', words: ['Apricot', 'Peach', 'Coral', 'Salmon'] },
     ],
   },
   {
